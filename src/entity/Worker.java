@@ -3,9 +3,21 @@ package entity;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
+import main.Game;
+
 public class Worker extends Unit{
 
 	private Part sprite;
+	
+	private final int FACTORY = 0;
+	
+	private final int[] buildTime = {1000};
+	private final int[] buildCost = {10};
+	
+	private long buildTimeStart;
+	private long buildTimeRemaining;
+	private int buildType;
+	private String buildName;
 	
 	public Worker (int posX, int posY) {
 		posX = posX * 64 + 224;
@@ -16,6 +28,8 @@ public class Worker extends Unit{
 		
 		sprite.SPEEDMOVE = 1;
 		sprite.SPEEDROTATE = 1;
+		
+		buildTimeRemaining = -1;
 	}
 	
 	@Override
@@ -33,6 +47,23 @@ public class Worker extends Unit{
 			sprite.updateRotate();
 		}
 		
+		if(!sprite.isRotating() && waitMoveDistance != 0){
+			move(waitMoveDistance);
+			waitMoveDistance = 0;
+		}
+		
+		if(buildTimeRemaining >= 0) {
+			buildTimeRemaining = System.currentTimeMillis() - buildTimeStart;
+			if(buildTimeRemaining >= buildTime[buildType]) {
+				if(buildType == FACTORY) {
+					Game.createFactory(buildName, (int)(sprite.getX()/64 - 224/64), (int)(sprite.getY()/64));
+				}else {
+					//rien pour le moment
+				}
+				buildTimeRemaining = -1;
+			}
+		}
+		
 	}
 
 	@Override
@@ -48,18 +79,6 @@ public class Worker extends Unit{
 	}
 
 	@Override
-	public void moveToPoint(int x, int y) {
-		float posX = sprite.getX() + x * 64;
-		float posY = sprite.getY() + y * 64;
-		
-		float angle = (float) Math.acos(scalaire(sprite.getX(), posX, sprite.getY(), posY));
-		
-		rotate((int) Math.toDegrees(angle));
-		//NON TERMINE
-		
-	}
-
-	@Override
 	public void rotate(int distance) {
 		if(distance > 0) {
 			sprite.rotateDistance = distance;
@@ -70,9 +89,26 @@ public class Worker extends Unit{
 		}
 		
 	}
+
+	@Override
+	protected float getRotation() {
+		return sprite.getRotation();
+	}
+
+	public boolean canBuild(String structure) {
+		return buildTimeRemaining == -1 && (structure.equals("factory"));
+	}
 	
-	private float scalaire (float x1, float x2, float y1, float y2) {
-		return x1*x2 + y1*y2;
+	public void build (String structure, String structName) {
+		if(structure.equals("factory")) {
+			buildType = FACTORY;
+		}else {
+			//rien pour le moment
+		}
+		
+		buildName = structName;
+		buildTimeStart = System.currentTimeMillis();
+		buildTimeRemaining = buildTime[buildType];
 	}
 
 }

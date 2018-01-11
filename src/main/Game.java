@@ -102,4 +102,8 @@ public class Game {
 	public static void createWorker(String name, int posX, int posY) {
 		players.get(0).addWorker(name, posX, posY);
 	}
+
+	public static void createFactory(String name, int posX, int posY) {
+		players.get(0).addFactory(name, posX, posY);
+	}
 }

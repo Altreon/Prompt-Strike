@@ -53,6 +53,11 @@ public class Tank extends Unit {
 				part.updateRotate();
 			}
 		}
+		
+		if(!chassis.isRotating() && waitMoveDistance != 0){
+			move(waitMoveDistance);
+			waitMoveDistance = 0;
+		}
 	}
 	
 	@Override
@@ -92,8 +97,7 @@ public class Tank extends Unit {
 	}
 
 	@Override
-	public void moveToPoint(int x, int y) {
-		// TODO Auto-generated method stub
-		
+	protected float getRotation() {
+		return chassis.getRotation();
 	}
 }

@@ -60,14 +60,24 @@ public class Command {
 			return fire(unitName, words);
 		}
 		
+		if (nextWord.equals("build") || nextWord.equals("b")) {
+			return build(unitName, words);
+		}
+		
 		return false;
 	}
 
 	private static boolean move(String unitName, ArrayList<String> words) {
-		if (words.size() != 1) {
+		if (words.size() == 1) {
+			return moveDir(unitName, words);
+		}else if (words.size() == 2) {
+			return movePos(unitName, words);
+		}else {
 			return false;
 		}
-		
+	}
+	
+	private static boolean moveDir(String unitName, ArrayList<String> words) {
 		int value = 0;
 		try {
 			value = Integer.parseInt(words.get(0));
@@ -77,6 +87,24 @@ public class Command {
 		
 		if(value >= -10 && value <= 10) {
 			Game.getPlayers().get(player).moveUnit(unitName, value);
+			return true;
+		}
+		
+		return false;
+	}
+	
+	private static boolean movePos(String unitName, ArrayList<String> words) {
+		int posX = 0;
+		int posY = 0;
+		try {
+			posX = Integer.parseInt(words.get(0));
+			posY = Integer.parseInt(words.get(1));
+		} catch(NumberFormatException e) {
+	        return false; 
+	    }
+		
+		if(posX >= -10 && posX <= 10 && posY >= -10 && posY <= 10) {
+			Game.getPlayers().get(player).moveUnit(unitName, posX, posY);
 			return true;
 		}
 		
@@ -150,6 +178,22 @@ public class Command {
 		
 		if(value >= 1 && value <= 5) {
 			Game.getPlayers().get(player).fireUnit(unitName, value);
+			return true;
+		}
+		
+		return false;
+	}
+	
+	private static boolean build(String unitName, ArrayList<String> words) {
+		if (words.size() != 2) {
+			return false;
+		}
+		
+		String structType = words.get(0);
+		String structName = words.get(1);
+		
+		if(Game.getPlayers().get(player).unitCanBuild(unitName, structType, structName)) {
+			Game.getPlayers().get(player).buildUnit(unitName, structType, structName);
 			return true;
 		}
 		

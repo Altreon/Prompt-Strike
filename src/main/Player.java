@@ -52,6 +52,10 @@ public class Player {
 		units.get(name).move(value);
 	}
 	
+	public void moveUnit(String name, int posX, int posY) {
+		units.get(name).move(posX, posY);
+	}
+	
 	public void rotateUnit(String name, int value) {
 		units.get(name).rotate(value);
 	}
@@ -70,6 +74,17 @@ public class Player {
 	
 	public void fireUnit(String name, int value) {
 		((Tank) units.get(name)).fire(value);
+	}
+	
+	public boolean unitCanBuild(String unitName, String structType, String structName) {
+		return units.get(unitName).getClass().getSimpleName().equals("Worker")
+				&& !structures.containsKey(structName)
+				&& ((Worker) units.get(unitName)).canBuild(structType);
+	}
+	
+	public void buildUnit(String unitName, String structType, String structName) {
+		((Worker) units.get(unitName)).build(structType, structName);
+		
 	}
 
 	public boolean structCanProduce(String structName, String unitType, String unitName) {
@@ -90,5 +105,9 @@ public class Player {
 	
 	public void addWorker(String name, int posX, int posY) {
 		units.put(name, new Worker(posX, posY));
+	}
+	
+	public void addFactory(String name, int posX, int posY) {
+		structures.put(name, new Factory(posX, posY));
 	}
 }

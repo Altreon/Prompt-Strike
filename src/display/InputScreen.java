@@ -21,6 +21,8 @@ public class InputScreen{
 	private TextField input;
 	private List<Label> commandsDisplay;
 	
+	private static String lastCommand;
+	
 	public InputScreen () {
 		uiSkin = new Skin(Gdx.files.internal("uiskin/uiskin.json"));
 		
@@ -45,6 +47,10 @@ public class InputScreen{
 		if (Gdx.input.isKeyJustPressed(Keys.ENTER)){
 			newCommand();
 		}
+		
+		if (Gdx.input.isKeyJustPressed(Keys.UP)){
+			input.setText(lastCommand);
+		}
 	}
 	
 	private void newCommand() {
@@ -63,6 +69,8 @@ public class InputScreen{
 		
 		commandsDisplay.add(commandDisplay);
 		stage.addActor(commandDisplay);
+		
+		lastCommand = commandText;
 	}
 
 }
