@@ -14,7 +14,7 @@ import main.PromptStrike;
 public class GameDisplay implements Screen{
 	
 	private Game game;
-	//
+	//truc
 	
 	private GameScreen gameScreen;
 	private InputScreen inputScreen;
