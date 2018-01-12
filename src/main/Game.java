@@ -6,6 +6,7 @@ import java.util.Hashtable;
 
 
 import effet.Effect;
+import entity.Entity;
 import entity.Part;
 import entity.Structure;
 import entity.Unit;
@@ -29,18 +30,24 @@ public class Game {
 		lastTime = System.currentTimeMillis();;
 	}
 	
-	public Hashtable<String, Unit> getAllUnits() {
-		Hashtable<String, Unit> units = new Hashtable<String, Unit>();
+	public ArrayList<Unit> getAllUnits() {
+		ArrayList<Unit> units = new ArrayList<Unit>();
 		for(Player player : players) {
-			units.putAll(player.getUnits());
+			Enumeration<Unit> unitsEnum = player.getUnits().elements();
+			while(unitsEnum.hasMoreElements()) {
+				units.add(unitsEnum.nextElement());
+			}
 		}
 		return units;
 	}
 	
-	public Hashtable<String, Structure> getAllstructures() {
-		Hashtable<String, Structure> structures = new Hashtable<String, Structure>();
+	public ArrayList<Structure> getAllstructures() {
+		ArrayList<Structure> structures = new ArrayList<Structure>();
 		for(Player player : players) {
-			structures.putAll(player.getStructures());
+			Enumeration<Structure> structuresEnum = player.getStructures().elements();
+			while(structuresEnum.hasMoreElements()) {
+				structures.add(structuresEnum.nextElement());
+			}
 		}
 		return structures;
 	}
@@ -63,22 +70,18 @@ public class Game {
 
 	public void update() {
 		long currentTime = System.currentTimeMillis();
-		long time = currentTime - lastTime;
+		int dt = (int) (System.currentTimeMillis() - lastTime);
 		
-		Enumeration<Structure> structuresEnum = getAllstructures().elements();
-		while(structuresEnum.hasMoreElements()) {
-			Structure structure = structuresEnum.nextElement();
-			structure.update();
+		for( Structure structure : getAllstructures()) {
+			structure.update(dt);
 		}
 		
-		Enumeration<Unit> unitsEnum = getAllUnits().elements();
-		while(unitsEnum.hasMoreElements()) {
-			Unit unit = unitsEnum.nextElement();
-			unit.update();
+		for( Unit unit : getAllUnits()) {
+			unit.update(dt);
 		}
 		
 		for (Effect effect : effects) {
-			effect.timeDecrease(time);
+			effect.timeDecrease(dt);
 		}
 		
 		destroyEntities();
@@ -93,6 +96,15 @@ public class Game {
 		}
 		
 		effectsToRemove.clear();
+	}
+	
+	public static void applyDamage(float posX, float posY, int radius, int amount) {
+		//ArrayList<Entity> entityTouched = new ArrayList<Entity>;
+		//for (Unit unit : getAllUnits()) {
+				
+			
+		//}
+		
 	}
 
 	public static void createTank(String name, int posX, int posY) {

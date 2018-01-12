@@ -64,6 +64,10 @@ public class Command {
 			return build(unitName, words);
 		}
 		
+		if (nextWord.equals("gather") || nextWord.equals("g")) {
+			return gather(unitName, words);
+		}
+		
 		return false;
 	}
 
@@ -194,6 +198,19 @@ public class Command {
 		
 		if(Game.getPlayers().get(player).unitCanBuild(unitName, structType, structName)) {
 			Game.getPlayers().get(player).buildUnit(unitName, structType, structName);
+			return true;
+		}
+		
+		return false;
+	}
+	
+	private static boolean gather (String unitName, ArrayList<String> words) {
+		if (words.size() != 0) {
+			return false;
+		}
+		
+		if(Game.getPlayers().get(player).unitCanGather(unitName)) {
+			Game.getPlayers().get(player).gatherUnit(unitName);
 			return true;
 		}
 		

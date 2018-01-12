@@ -13,6 +13,8 @@ import entity.Worker;
 
 public class Player {
 	
+	private int money;
+	
 	private static Hashtable<String, Unit> units;
 	private static ArrayList<Unit> unitsToRemove;
 	
@@ -30,6 +32,14 @@ public class Player {
 		units.put("worker", new Worker(2,2));
 		
 		structures.put("factory", new Factory(3,3));
+	}
+	
+	public void addMoney(int amont) {
+		money += amont;
+	}
+	
+	public void removeMoney(int amont) {
+		money -= amont;
 	}
 	
 	public Hashtable<String, Unit> getUnits() {
@@ -85,6 +95,15 @@ public class Player {
 	public void buildUnit(String unitName, String structType, String structName) {
 		((Worker) units.get(unitName)).build(structType, structName);
 		
+	}
+	
+	public boolean unitCanGather(String unitName) {
+		return units.get(unitName).getClass().getSimpleName().equals("Worker")
+				&& ((Worker) units.get(unitName)).canGather();
+	}
+	
+	public void gatherUnit(String unitName) {
+		((Worker) units.get(unitName)).gather();
 	}
 
 	public boolean structCanProduce(String structName, String unitType, String unitName) {

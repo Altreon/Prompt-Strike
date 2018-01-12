@@ -8,15 +8,15 @@ public class Map {
 	
 	Sprite grass;
 	
-	Sprite[][] map;
+	static Tile[][] map;
 	
 	public Map() {
 		loadSprite();
-		map = new Sprite[13][11];
+		map = new Tile[13][11];
 		for (int i=0; i < map.length; i++) {
 			for (int j=0; j < map[0].length; j++) {
-				map[i][j] = new Sprite(new Texture("Tiles/grass.png"));
-				map[i][j].setPosition(224 + 64*i, 64*j);
+				map[i][j] = new Tile("grass");
+				map[i][j].setPos(224 + 64*i, 64*j);
 			}
 		}
 	}
@@ -26,11 +26,15 @@ public class Map {
 	}
 	
 	public void render (Batch batch) {
-		for (Sprite[] spriteLine : map) {
-			for (Sprite sprite : spriteLine) {
-				sprite.draw(batch);
+		for (Tile[] tileLine : map) {
+			for (Tile tile : tileLine) {
+				tile.render(batch);
 			}
 		}
+	}
+	
+	static public String getTileType(int posX, int posY) {
+		return map[posX][posY].getType();
 	}
 
 }

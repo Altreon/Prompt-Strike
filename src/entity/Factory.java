@@ -24,7 +24,7 @@ public class Factory extends Structure{
 	}
 
 	@Override
-	public void update() {
+	public void update(int dt) {
 		if(prodTimeRemaining >= 0) {
 			prodTimeRemaining = System.currentTimeMillis() - prodTimeStart;
 			if(prodTimeRemaining >= prodTime[prodType]) {

@@ -23,15 +23,11 @@ public class GameScreen{
 	public void render (Batch batch) {
 		map.render(batch);
 		
-		Enumeration<Structure> structuresEnum = game.getAllstructures().elements();
-		while(structuresEnum.hasMoreElements()) {
-			Structure structure = structuresEnum.nextElement();
+		for( Structure structure : game.getAllstructures()) {
 			structure.render(batch);
 		}
 		
-		Enumeration<Unit> unitsEnum = game.getAllUnits().elements();
-		while(unitsEnum.hasMoreElements()) {
-			Unit unit = unitsEnum.nextElement();
+		for( Unit unit : game.getAllUnits()) {
 			unit.render(batch);
 		}
 		

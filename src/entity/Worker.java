@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
 import main.Game;
+import map.Map;
 
 public class Worker extends Unit{
 
@@ -11,13 +12,16 @@ public class Worker extends Unit{
 	
 	private final int FACTORY = 0;
 	
-	private final int[] buildTime = {1000};
+	private String action;
+	private int actionTimeRemaining;
+	
+	private final int[] buildTime = {100}; // à augmenter
 	private final int[] buildCost = {10};
 	
-	private long buildTimeStart;
-	private long buildTimeRemaining;
 	private int buildType;
 	private String buildName;
+	
+	private final int GATHERTIME = 1000;
 	
 	public Worker (int posX, int posY) {
 		posX = posX * 64 + 224;
@@ -29,7 +33,7 @@ public class Worker extends Unit{
 		sprite.SPEEDMOVE = 1;
 		sprite.SPEEDROTATE = 1;
 		
-		buildTimeRemaining = -1;
+		action = "";
 	}
 	
 	@Override
@@ -39,28 +43,41 @@ public class Worker extends Unit{
 	}
 
 	@Override
-	public void update() {
-		if(sprite.isMoving()){
-			sprite.updateMove();
-		}
-		if(sprite.isRotating()){
-			sprite.updateRotate();
-		}
-		
-		if(!sprite.isRotating() && waitMoveDistance != 0){
-			move(waitMoveDistance);
-			waitMoveDistance = 0;
-		}
-		
-		if(buildTimeRemaining >= 0) {
-			buildTimeRemaining = System.currentTimeMillis() - buildTimeStart;
-			if(buildTimeRemaining >= buildTime[buildType]) {
+	public void update(int dt) {
+		if(action.equals("build")) {
+			
+			if(actionTimeRemaining > 0) {
+				actionTimeRemaining -= dt;
+			}else {
+				actionTimeRemaining = 0;
 				if(buildType == FACTORY) {
 					Game.createFactory(buildName, (int)(sprite.getX()/64 - 224/64), (int)(sprite.getY()/64));
 				}else {
 					//rien pour le moment
 				}
-				buildTimeRemaining = -1;
+				action = "";
+			}
+		
+		}else if(action.equals("gather")){
+			if(actionTimeRemaining > 0) {
+				actionTimeRemaining -= dt;
+			}else {
+				actionTimeRemaining = 0;
+				System.out.println("j'ai récolté un truc!");
+				gather();
+			}
+		}else {
+		
+			if(sprite.isMoving()){
+				sprite.updateMove();
+			}
+			if(sprite.isRotating()){
+				sprite.updateRotate();
+			}
+		
+			if(!sprite.isRotating() && waitMoveDistance != 0){
+				move(waitMoveDistance);
+				waitMoveDistance = 0;
 			}
 		}
 		
@@ -75,7 +92,7 @@ public class Worker extends Unit{
 			sprite.moveDistance = -distance*64;
 			sprite.moveDirection = -1;
 		}
-		
+		action = "";
 	}
 
 	@Override
@@ -87,7 +104,7 @@ public class Worker extends Unit{
 			sprite.rotateDistance = -distance;
 			sprite.rotateDirection = -1;
 		}
-		
+		action = "";
 	}
 
 	@Override
@@ -96,7 +113,7 @@ public class Worker extends Unit{
 	}
 
 	public boolean canBuild(String structure) {
-		return buildTimeRemaining == -1 && (structure.equals("factory"));
+		return structure.equals("factory");
 	}
 	
 	public void build (String structure, String structName) {
@@ -107,8 +124,18 @@ public class Worker extends Unit{
 		}
 		
 		buildName = structName;
-		buildTimeStart = System.currentTimeMillis();
-		buildTimeRemaining = buildTime[buildType];
+		actionTimeRemaining = buildTime[buildType];
+		
+		action = "build";
+	}
+	
+	public boolean canGather () {
+		return Map.getTileType( (int)(sprite.getX()/64 - 224/64), (int)(sprite.getY()/64)).equals("grass");
+	}
+	
+	public void gather () {
+		action = "gather";
+		actionTimeRemaining = GATHERTIME;
 	}
 
 }

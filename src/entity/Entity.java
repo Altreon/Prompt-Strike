@@ -7,5 +7,5 @@ public abstract class Entity {
 	private int HP;
 	
 	public abstract void render(Batch batch);
-	public abstract void update();
+	public abstract void update(int dt);
 }

@@ -14,7 +14,7 @@ public class Effect extends Sprite{
 		setRotation(rotation);
 	}
 	
-	public void timeDecrease (long currentTime) {
+	public void timeDecrease (int currentTime) {
 		duration -= currentTime;
 		if (duration <= 0) {
 			Game.destroyEffect(this);
