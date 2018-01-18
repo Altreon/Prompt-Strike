@@ -5,12 +5,15 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 
 public class Tank extends Unit {
 	
+	private static final int COST = 20;
+	
 	private Chassis chassis;
 	private Cannon cannon;
 	
 	private Part[] parts;
 
-	public Tank (int posX, int posY) {
+	public Tank (String name, int posX, int posY) {
+		super(name);
 		posX = posX * 64 + 224;
 		posY *= 64;
 		
@@ -23,6 +26,15 @@ public class Tank extends Unit {
 		
 		parts[0] = chassis;
 		parts[1] = cannon;
+	}
+	
+	public static int getCost () {
+		return COST;
+	}
+	
+	@Override
+	public float[] getPos() {
+		return new float[]{chassis.getX(), chassis.getY()};
 	}
 	
 	public Part[] getParts () {
@@ -92,8 +104,8 @@ public class Tank extends Unit {
 		}
 	}
 
-	public void fire(int distance) {
-		cannon.fire(distance);
+	public void fire(int distance, int playerOwner) {
+		cannon.fire(distance, playerOwner);
 	}
 
 	@Override

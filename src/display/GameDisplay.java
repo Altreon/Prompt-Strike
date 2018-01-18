@@ -18,7 +18,7 @@ public class GameDisplay implements Screen{
 	
 	private GameScreen gameScreen;
 	private InputScreen inputScreen;
-	//private OutputScreen outputScreen;
+	private OutputScreen outputScreen;
 	
 	private SpriteBatch renderer;
 	
@@ -27,6 +27,7 @@ public class GameDisplay implements Screen{
 		
 		gameScreen = new GameScreen(game);
 		inputScreen = new InputScreen();
+		outputScreen = new OutputScreen();
 		
 		renderer = new SpriteBatch();
 		
@@ -47,6 +48,7 @@ public class GameDisplay implements Screen{
 		gameScreen.render(renderer);
 		renderer.end();
 		inputScreen.render();
+		outputScreen.render();
 		
 	}
 

@@ -9,6 +9,7 @@ public class Map {
 	Sprite grass;
 	
 	static Tile[][] map;
+	static Ressource[][] ressources;
 	
 	public Map() {
 		loadSprite();
@@ -19,6 +20,10 @@ public class Map {
 				map[i][j].setPos(224 + 64*i, 64*j);
 			}
 		}
+		
+		ressources = new Ressource[13][11];
+		ressources[4][0] = new Ressource("crystal", 4, 0);
+		
 	}
 
 	private void loadSprite() {
@@ -31,10 +36,22 @@ public class Map {
 				tile.render(batch);
 			}
 		}
+		
+		for (Ressource[] resLine : ressources) {
+			for (Ressource res : resLine) {
+				if(res != null) {
+					res.render(batch);
+				}
+			}
+		}
 	}
 	
-	static public String getTileType(int posX, int posY) {
-		return map[posX][posY].getType();
+	static public String getRessourceType(int posX, int posY) {
+		if(ressources[posX][posY] != null) {
+			return ressources[posX][posY].getType();
+		}else {
+			return "";
+		}
 	}
 
 }

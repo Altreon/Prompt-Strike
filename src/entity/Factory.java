@@ -7,6 +7,8 @@ import main.Game;
 
 public class Factory extends Structure{
 	
+	private static final int COST = 50;
+	
 	private final int TANK = 0;
 	private final int WORKER = 1;
 	
@@ -18,9 +20,13 @@ public class Factory extends Structure{
 	private int prodType;
 	private String prodName;
 	
-	public Factory(int posX, int posY) {
-		super(new Sprite(new Texture("Structures/factory.png")), posX, posY);
+	public Factory(String name, int posX, int posY) {
+		super(name, new Sprite(new Texture("Structures/factory.png")), posX, posY);
 		prodTimeRemaining = -1;
+	}
+	
+	public static int getCost () {
+		return COST;
 	}
 
 	@Override
@@ -39,14 +45,27 @@ public class Factory extends Structure{
 	}
 	
 	public boolean canProduce (String product) {
-		return prodTimeRemaining == -1 && (product.equals("tank") || product.equals("worker"));
+		if(prodTimeRemaining != -1) {
+			return false;
+		}else {
+			if(product.equals("tank")) {
+				return Game.getPlayers().get(0).sufficientMoney(Tank.getCost());
+			}else if(product.equals("worker")) {
+				return Game.getPlayers().get(0).sufficientMoney(Worker.getCost());
+			}else {
+				return false;
+			}
+			
+		}
 	}
 	
 	public void produce (String product, String productName) {
 		if(product.equals("tank")) {
 			prodType = TANK;
+			Game.removeMoney(Tank.getCost());
 		}else {
 			prodType = WORKER;
+			Game.removeMoney(Worker.getCost());
 		}
 		
 		prodName = productName;

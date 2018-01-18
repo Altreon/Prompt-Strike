@@ -23,11 +23,11 @@ public class GameScreen{
 	public void render (Batch batch) {
 		map.render(batch);
 		
-		for( Structure structure : game.getAllstructures()) {
+		for( Structure structure : Game.getAllstructures()) {
 			structure.render(batch);
 		}
 		
-		for( Unit unit : game.getAllUnits()) {
+		for( Unit unit : Game.getAllUnits()) {
 			unit.render(batch);
 		}
 		

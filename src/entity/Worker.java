@@ -7,6 +7,8 @@ import main.Game;
 import map.Map;
 
 public class Worker extends Unit{
+	
+	private static final int COST = 10;
 
 	private Part sprite;
 	
@@ -23,7 +25,8 @@ public class Worker extends Unit{
 	
 	private final int GATHERTIME = 1000;
 	
-	public Worker (int posX, int posY) {
+	public Worker (String name, int posX, int posY) {
+		super(name);
 		posX = posX * 64 + 224;
 		posY *= 64;
 		
@@ -34,6 +37,15 @@ public class Worker extends Unit{
 		sprite.SPEEDROTATE = 1;
 		
 		action = "";
+	}
+	
+	public static int getCost () {
+		return COST;
+	}
+	
+	@Override
+	public float[] getPos() {
+		return new float[]{sprite.getX(), sprite.getY()};
 	}
 	
 	@Override
@@ -63,7 +75,7 @@ public class Worker extends Unit{
 				actionTimeRemaining -= dt;
 			}else {
 				actionTimeRemaining = 0;
-				System.out.println("j'ai récolté un truc!");
+				Game.addMoney(1);;
 				gather();
 			}
 		}else {
@@ -113,12 +125,13 @@ public class Worker extends Unit{
 	}
 
 	public boolean canBuild(String structure) {
-		return structure.equals("factory");
+		return structure.equals("factory") && Game.getPlayers().get(0).sufficientMoney(Factory.getCost());
 	}
 	
 	public void build (String structure, String structName) {
 		if(structure.equals("factory")) {
 			buildType = FACTORY;
+			Game.removeMoney(Factory.getCost());
 		}else {
 			//rien pour le moment
 		}
@@ -130,7 +143,7 @@ public class Worker extends Unit{
 	}
 	
 	public boolean canGather () {
-		return Map.getTileType( (int)(sprite.getX()/64 - 224/64), (int)(sprite.getY()/64)).equals("grass");
+		return Map.getRessourceType( (int)(sprite.getX()/64 - 224/64), (int)(sprite.getY()/64)).equals("crystal");
 	}
 	
 	public void gather () {

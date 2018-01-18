@@ -1,9 +1,13 @@
 package main;
 
+//Sécurité nommage, il est possible que 2 unité de nom différent soit créer dans 2 factory différentes.
+
 
 import com.badlogic.gdx.Game;
 
 import display.GameDisplay;
+import network.Client;
+import network.Server;
 public class PromptStrike extends Game {
 	
 	private main.Game game;
@@ -22,11 +26,6 @@ public class PromptStrike extends Game {
 
 	@Override
 	public void render () {
-//		Gdx.gl.glClearColor(1, 0, 0, 1);
-//		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-//		batch.begin();
-//		batch.draw(img, 0, 0);
-//		batch.end();
 		super.render();
 		game.update();
 	}

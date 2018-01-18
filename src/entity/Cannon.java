@@ -12,7 +12,7 @@ public class Cannon extends Part{
 	private final int ESTIMATETIME = 330;
 	private long startTime;
 	
-	private final int IMPACTRADIUS = 3;
+	private final int IMPACTRADIUS = 1;
 	private final int IMPACTDAMAGE = 1;
 
 	public Cannon () {
@@ -39,14 +39,14 @@ public class Cannon extends Part{
 		}
 	}
 
-	public void fire(int distance) {
+	public void fire(int distance, int playerOwner) {
 		float firePosX = (float) (getX() + getWidth()/1.3f*Math.cos(Math.toRadians(getRotation())));
 		float firePosY = (float) (getY() + getHeight()/1.3f*Math.sin(Math.toRadians(getRotation())));
 		
 		float ImpactPosX = (float) (getX() + distance*64*Math.cos(Math.toRadians(getRotation())));
 		float ImpactPosY = (float) (getY() + distance*64*Math.sin(Math.toRadians(getRotation())));
 		
-		Game.applyDamage(ImpactPosX, ImpactPosY, IMPACTRADIUS, IMPACTDAMAGE);
+		Game.applyDamage(ImpactPosX, ImpactPosY, IMPACTRADIUS, IMPACTDAMAGE, playerOwner);
 		Game.createEffect(new TankFire(firePosX, firePosY, getRotation() - 90));
 		Game.createEffect(new TankImpact(ImpactPosX, ImpactPosY, 0));
 	

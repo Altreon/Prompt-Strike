@@ -4,12 +4,16 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
-
+import display.OutputScreen;
 import effet.Effect;
 import entity.Entity;
 import entity.Part;
 import entity.Structure;
 import entity.Unit;
+import math.MATH;
+import network.Client;
+import network.Network;
+import network.Server;
 
 public class Game {
 	
@@ -20,6 +24,9 @@ public class Game {
 	
 	private long lastTime;
 	
+	private static Network network;
+	
+	
 	public Game () {
 		players = new ArrayList<Player>();
 		players.add(new Player());
@@ -27,10 +34,16 @@ public class Game {
 		effects = new ArrayList<Effect>();
 		effectsToRemove = new ArrayList<Effect>();
 		
-		lastTime = System.currentTimeMillis();;
+		network = new Network();
+		
+		lastTime = System.currentTimeMillis();
 	}
 	
-	public ArrayList<Unit> getAllUnits() {
+	public static void createServer() {
+		network.createServer();
+	}
+	
+	public static ArrayList<Unit> getAllUnits() {
 		ArrayList<Unit> units = new ArrayList<Unit>();
 		for(Player player : players) {
 			Enumeration<Unit> unitsEnum = player.getUnits().elements();
@@ -41,7 +54,7 @@ public class Game {
 		return units;
 	}
 	
-	public ArrayList<Structure> getAllstructures() {
+	public static ArrayList<Structure> getAllstructures() {
 		ArrayList<Structure> structures = new ArrayList<Structure>();
 		for(Player player : players) {
 			Enumeration<Structure> structuresEnum = player.getStructures().elements();
@@ -98,12 +111,40 @@ public class Game {
 		effectsToRemove.clear();
 	}
 	
-	public static void applyDamage(float posX, float posY, int radius, int amount) {
-		//ArrayList<Entity> entityTouched = new ArrayList<Entity>;
-		//for (Unit unit : getAllUnits()) {
-				
+	public static void addMoney(int amont) {
+		players.get(0).addMoney(amont);
+	}
+	
+	public static void removeMoney(int amont) {
+		players.get(0).removeMoney(amont);
+	}
+	
+	public static void applyDamage(float posX, float posY, int radius, int amount, int playerExluded) {
+		ArrayList<Entity> entityTouched = new ArrayList<Entity>();
+		for (Unit unit : getAllUnits()) {
+			float[] posDamageUnit = {unit.getPos()[0] - posX, unit.getPos()[1] - posY};
+			if(!players.get(playerExluded).isUnit(unit.getName()) && MATH.norme(posDamageUnit) <= radius*64) {
+				System.out.println("touch!");;
+				entityTouched.add(unit);
+			}
 			
-		//}
+		}
+		
+		for (Structure struct : getAllstructures()) {
+			float[] posDamageStruct = {struct.getPos()[0] - posX, struct.getPos()[1] - posY};
+			if(!players.get(playerExluded).isStructure(struct.getName()) && MATH.norme(posDamageStruct) <= radius*64) {
+				System.out.println("touch!");
+				entityTouched.add(struct);
+			}
+			
+		}
+		
+		for (Entity entity : entityTouched) {
+			entity.changeHP(-amount);
+			if(entity.getHP() <= 0) {
+				players.get(0).destroyEntity(entity);
+			}
+		}
 		
 	}
 

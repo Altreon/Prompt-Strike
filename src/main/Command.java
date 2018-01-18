@@ -31,6 +31,8 @@ public class Command {
 		
 		if (Game.getPlayers().get(player).isStructure(firstWord)) {
 			commandCorrect = structCommand(firstWord, words);
+		}else {
+			commandCorrect = networkCommand(firstWord, words);
 		}
 		
 		if (commandCorrect) {
@@ -41,6 +43,23 @@ public class Command {
 			
 	}
 	
+	private static boolean networkCommand(String firstWord, ArrayList<String> words) {
+		if (words.size() != 0) {
+			return false;
+		}
+		
+		if (firstWord.equals("create")) {
+			return createServer(words);
+		}
+		
+		return false;
+	}
+
+	private static boolean createServer(ArrayList<String> words) {
+		Game.createServer();
+		return true;
+	}
+
 	private static boolean unitCommand(String unitName, ArrayList<String> words) {
 		if (words.size() == 0) {
 			return false;
@@ -181,7 +200,7 @@ public class Command {
 	    }
 		
 		if(value >= 1 && value <= 5) {
-			Game.getPlayers().get(player).fireUnit(unitName, value);
+			Game.getPlayers().get(player).fireUnit(unitName, value, player);
 			return true;
 		}
 		

@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Map;
 
+import display.OutputScreen;
 import effet.Effect;
+import entity.Entity;
 import entity.Factory;
 import entity.Structure;
 import entity.Tank;
@@ -28,18 +30,22 @@ public class Player {
 		structures = new Hashtable<String, Structure>();
 		structuresToRemove = new ArrayList<Structure>();
 		
-		units.put("tank", new Tank(1,1));
-		units.put("worker", new Worker(2,2));
+		//units.put("tank", new Tank("tank", 1,1));
+		units.put("worker", new Worker("worker", 2,2));
 		
-		structures.put("factory", new Factory(3,3));
+		//structures.put("factory", new Factory("factory", 3,3));
+		
+		money = 100;
 	}
 	
 	public void addMoney(int amont) {
 		money += amont;
+		OutputScreen.updateMoney(money);
 	}
 	
 	public void removeMoney(int amont) {
 		money -= amont;
+		OutputScreen.updateMoney(money);
 	}
 	
 	public Hashtable<String, Unit> getUnits() {
@@ -82,13 +88,18 @@ public class Player {
 		return units.get(name).getClass().getSimpleName().equals("Tank");
 	}
 	
-	public void fireUnit(String name, int value) {
-		((Tank) units.get(name)).fire(value);
+	public void fireUnit(String name, int value, int playerOwner) {
+		((Tank) units.get(name)).fire(value, playerOwner);
+	}
+	
+	public boolean sufficientMoney(int cost) {
+		return money >= cost;
 	}
 	
 	public boolean unitCanBuild(String unitName, String structType, String structName) {
 		return units.get(unitName).getClass().getSimpleName().equals("Worker")
 				&& !structures.containsKey(structName)
+				&& !units.containsKey(structName)
 				&& ((Worker) units.get(unitName)).canBuild(structType);
 	}
 	
@@ -109,6 +120,7 @@ public class Player {
 	public boolean structCanProduce(String structName, String unitType, String unitName) {
 		return structures.get(structName).getClass().getSimpleName().equals("Factory")
 				&& !units.containsKey(unitName)
+				&& !structures.containsKey(unitName)
 				&& ((Factory) structures.get(structName)).canProduce(unitType); //à généralisé dans class Structure
 	}
 
@@ -118,15 +130,25 @@ public class Player {
 	}
 	
 	public void addTank(String name, int posX, int posY) {
-		units.put(name, new Tank(posX, posY));
+		units.put(name, new Tank(name, posX, posY));
 		
 	}
 	
 	public void addWorker(String name, int posX, int posY) {
-		units.put(name, new Worker(posX, posY));
+		units.put(name, new Worker(name, posX, posY));
 	}
 	
 	public void addFactory(String name, int posX, int posY) {
-		structures.put(name, new Factory(posX, posY));
+		structures.put(name, new Factory(name, posX, posY));
+	}
+
+	public void destroyEntity(Entity entity) {
+		String entityClass = entity.getClass().getSuperclass().getSimpleName();
+		if(entityClass.equals("Unit")) {
+			units.remove(entity.getName());
+		}else {
+			structures.remove(entity.getName());
+		}
+		
 	}
 }

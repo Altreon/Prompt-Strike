@@ -10,7 +10,8 @@ public abstract class Structure extends Entity{
 	
 	private Sprite sprite;
 	
-	public Structure (Sprite sprite, int posX, int posY) {
+	public Structure (String name, Sprite sprite, int posX, int posY) {
+		super(name);
 		this.sprite = sprite;
 		
 		this.posX = posX;
@@ -25,6 +26,11 @@ public abstract class Structure extends Entity{
 	@Override
 	public void render(Batch batch) {
 		sprite.draw(batch);
+	}
+	
+	@Override
+	public float[] getPos() {
+		return new float[]{sprite.getX(), sprite.getY()};
 	}
 	
 }
