@@ -44,9 +44,11 @@ public class GameDisplay implements Screen{
 		Gdx.gl.glClearColor(0,0,0,1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
-		renderer.begin();
-		gameScreen.render(renderer);
-		renderer.end();
+		if(game.inGame()) {
+			renderer.begin();
+			gameScreen.render(renderer);
+			renderer.end();
+		}
 		inputScreen.render();
 		outputScreen.render();
 		

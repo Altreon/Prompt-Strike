@@ -1,9 +1,7 @@
 package network;
 
 public class Network {
-	
-	private Server server;
-	private Client client;
+	private Connexion connexion;
 	
 	private Thread networkThread;
 	
@@ -11,16 +9,17 @@ public class Network {
 		
 	}
 	
-	public void createServer () {
-		server = new Server();
-		networkThread = new Thread(server);
-		networkThread.start();
-	}
-	
-	public void createClient () {
-		client = new Client();
-		networkThread = new Thread(server);
+	public void connect () {
+		connexion = new Connexion();
+		networkThread = new Thread(connexion);
 		networkThread.start();
 	}
 
+	public void sendCommand(String command) {
+		connexion.sendCommand(command);		
+	}
+
+	public boolean isConnected() {
+		return true;
+	}
 }

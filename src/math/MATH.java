@@ -13,4 +13,8 @@ public final class MATH {
 	public static float det(float[] vectDir, float[] vectRot) {
 		return vectDir[0] * vectRot[1] - vectDir[1] * vectRot[0];
 	}
+	
+	public static double dist(float[] point1, float[] point2) {
+		return Math.sqrt(Math.pow(point2[0]-point1[0], 2) + Math.pow(point2[1]-point1[1], 2));
+	}
 }

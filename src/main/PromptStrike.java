@@ -6,7 +6,7 @@ package main;
 import com.badlogic.gdx.Game;
 
 import display.GameDisplay;
-import network.Client;
+import network.Connexion;
 import network.Server;
 public class PromptStrike extends Game {
 	

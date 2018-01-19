@@ -16,7 +16,7 @@ public class Command {
 
 	public static Color processCommand(String commandText) {
 		boolean commandCorrect = false;
-		
+		boolean localCommand = false;
 		
 		ArrayList<String> words = new ArrayList<String>();
 		for (String word : commandText.split(" ")) {
@@ -27,15 +27,17 @@ public class Command {
 		
 		if (Game.getPlayers().get(player).isUnit(firstWord)) {
 			commandCorrect = unitCommand(firstWord, words);
-		}
-		
-		if (Game.getPlayers().get(player).isStructure(firstWord)) {
+		}else if (Game.getPlayers().get(player).isStructure(firstWord)) {
 			commandCorrect = structCommand(firstWord, words);
 		}else {
+			localCommand = true;
 			commandCorrect = networkCommand(firstWord, words);
 		}
 		
 		if (commandCorrect) {
+			if(!localCommand) {
+				Game.sendCommand(commandText);
+			}
 			return Color.WHITE;
 		}else{
 			return Color.RED;
@@ -51,12 +53,20 @@ public class Command {
 		if (firstWord.equals("create")) {
 			return createServer(words);
 		}
+		if (firstWord.equals("connect")) {
+			return connectedServer(words);
+		}
 		
 		return false;
 	}
 
 	private static boolean createServer(ArrayList<String> words) {
 		Game.createServer();
+		return true;
+	}
+	
+	private static boolean connectedServer(ArrayList<String> words) {
+		Game.connectedServer();
 		return true;
 	}
 

@@ -2,18 +2,13 @@ package main;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.Hashtable;
 
-import display.OutputScreen;
 import effet.Effect;
 import entity.Entity;
-import entity.Part;
 import entity.Structure;
 import entity.Unit;
 import math.MATH;
-import network.Client;
 import network.Network;
-import network.Server;
 
 public class Game {
 	
@@ -39,8 +34,20 @@ public class Game {
 		lastTime = System.currentTimeMillis();
 	}
 	
+	public boolean inGame() {
+		return network.isConnected();
+	}
+	
 	public static void createServer() {
 		network.createServer();
+	}
+	
+	public static void connectedServer() {
+		network.createClient();
+	}
+	
+	public static void sendCommand(String command) {
+		network.sendCommand(command);
 	}
 	
 	public static ArrayList<Unit> getAllUnits() {
