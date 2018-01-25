@@ -6,7 +6,9 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-public class Connexion implements Runnable{
+import main.Command;
+
+public class TCPConnexion implements Runnable{
 	private Socket socket;
 	private DataInputStream streamIn;
 	private DataOutputStream streamOut;
@@ -24,14 +26,17 @@ public class Connexion implements Runnable{
 			System.out.println("Unexpected exception: " + ioe.getMessage());
 		}
 		if(socket != null) {
-			String line = "";
-			while (!line.equals("disconnect")) {  
+			boolean connect = true;
+			while (connect) {  
 				try {  
-					line = streamIn.readUTF();
-			        streamOut.writeUTF(line);
-			        streamOut.flush();
+					int numPlayer = streamIn.readInt();
+					String line = streamIn.readUTF();
+					boolean correct = streamIn.readBoolean();
+			        Command.processServerCommand(numPlayer, line, correct);
 			    } catch(IOException ioe) {  
 			    	System.out.println("error: " + ioe.getMessage());
+			    	stop();
+			    	connect = false;
 			    }
 			}
 		}

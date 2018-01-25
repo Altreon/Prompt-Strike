@@ -84,4 +84,8 @@ public class GameDisplay implements Screen{
 		
 	}
 
+	public InputScreen getInputScreen() {
+		return inputScreen;
+	}
+
 }

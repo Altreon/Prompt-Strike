@@ -1,25 +1,31 @@
 package network;
 
 public class Network {
-	private Connexion connexion;
+	private TCPConnexion TCPConnexion;
+	private UDPConnexion UDPConnexion;
 	
-	private Thread networkThread;
+	private Thread TCPThread;
+	private Thread UDPThread;
 	
 	public Network () {
 		
 	}
 	
 	public void connect () {
-		connexion = new Connexion();
-		networkThread = new Thread(connexion);
-		networkThread.start();
+		TCPConnexion = new TCPConnexion();
+		TCPThread = new Thread(TCPConnexion);
+		TCPThread.start();
+		
+		UDPConnexion = new UDPConnexion();
+		UDPThread = new Thread(UDPConnexion);
+		UDPThread.start();
 	}
 
 	public void sendCommand(String command) {
-		connexion.sendCommand(command);		
+		TCPConnexion.sendCommand(command);		
 	}
 
 	public boolean isConnected() {
-		return true;
+		return TCPConnexion != null;
 	}
 }

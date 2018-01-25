@@ -57,10 +57,19 @@ public class InputScreen{
 		String commandText = input.getText();
 		input.setText("");
 		
-		Color ColorCommand =  Command.processCommand(commandText);
-				
+		Command.processCommand(commandText);
+		
+		lastCommand = commandText;
+	}
+	
+	public void dispCommand(String commandText, boolean correct) {
 		Label commandDisplay = new Label(commandText, uiSkin);
-		commandDisplay.setColor(ColorCommand);
+		
+		if(correct) {
+			commandDisplay.setColor(Color.WHITE);
+		}else {
+			commandDisplay.setColor(Color.RED);
+		}
 		commandDisplay.setPosition(224 + 64*13, input.getHeight());
 		
 		for (Label label : commandsDisplay) {

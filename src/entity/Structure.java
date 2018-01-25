@@ -33,4 +33,9 @@ public abstract class Structure extends Entity{
 		return new float[]{sprite.getX(), sprite.getY()};
 	}
 	
+	@Override
+	public void setPos(float posX, float posY) {
+		sprite.setPosition(posX, posY);
+	}
+	
 }

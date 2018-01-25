@@ -6,8 +6,6 @@ package main;
 import com.badlogic.gdx.Game;
 
 import display.GameDisplay;
-import network.Connexion;
-import network.Server;
 public class PromptStrike extends Game {
 	
 	private main.Game game;
@@ -16,12 +14,16 @@ public class PromptStrike extends Game {
 	// private InputWindows
 	// private OutputWindows
 	
+	private Command commande;
+	
 	@Override
 	public void create () {
 		game = new main.Game();
 		
 		gameDisplay = new GameDisplay(game);
 		super.setScreen(gameDisplay);
+		
+		commande = new Command(game, gameDisplay.getInputScreen());
 	}
 
 	@Override

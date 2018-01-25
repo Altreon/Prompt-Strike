@@ -33,6 +33,11 @@ public class Tank extends Unit {
 	}
 	
 	@Override
+	public void setPos(float posX, float posY) {
+		chassis.setPosition(posX, posY);
+	}
+	
+	@Override
 	public float[] getPos() {
 		return new float[]{chassis.getX(), chassis.getY()};
 	}
@@ -57,55 +62,20 @@ public class Tank extends Unit {
 	
 	@Override
 	public void update(int dt) {
-		for(Part part : parts) {
-			if(part.isMoving()){
-				part.updateMove();
-			}
-			if(part.isRotating()){
-				part.updateRotate();
-			}
-		}
 		
-		if(!chassis.isRotating() && waitMoveDistance != 0){
-			move(waitMoveDistance);
-			waitMoveDistance = 0;
-		}
-	}
-	
-	@Override
-	public void move(int distance) {
-		if(distance > 0) {
-			chassis.moveDistance = distance*64;
-			chassis.moveDirection = 1;
-		}else {
-			chassis.moveDistance = -distance*64;
-			chassis.moveDirection = -1;
-		}
-	}
-	
-	@Override
-	public void rotate(int distance) {
-		if(distance > 0) {
-			chassis.rotateDistance = distance;
-			chassis.rotateDirection = 1;
-		}else {
-			chassis.rotateDistance = -distance;
-			chassis.rotateDirection = -1;
-		}
 	}
 	
 	public void rotateCannon(int distance) {
-		if(distance > 0) {
-			cannon.rotateDistance = distance;
-			cannon.rotateDirection = 1;
-		}else {
-			cannon.rotateDistance = -distance;
-			cannon.rotateDirection = -1;
-		}
+		
 	}
 
 	public void fire(int distance, int playerOwner) {
 		cannon.fire(distance, playerOwner);
+	}
+	
+	@Override
+	public void setRotation(float rotation) {
+		chassis.setRotation(rotation);
 	}
 
 	@Override

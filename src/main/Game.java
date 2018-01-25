@@ -3,11 +3,15 @@ package main;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
+import com.badlogic.gdx.graphics.Texture;
+
 import effet.Effect;
 import entity.Entity;
 import entity.Structure;
 import entity.Unit;
 import math.MATH;
+import message.Message;
+import message.PosMessage;
 import network.Network;
 
 public class Game {
@@ -21,29 +25,36 @@ public class Game {
 	
 	private static Network network;
 	
+	//temporaire
+	private static Texture workerTexture;
+	
 	
 	public Game () {
 		players = new ArrayList<Player>();
-		players.add(new Player());
+		//players.add(new Player());
 		
 		effects = new ArrayList<Effect>();
 		effectsToRemove = new ArrayList<Effect>();
 		
 		network = new Network();
 		
+		workerTexture = new Texture("Units/worker.png");
+		
 		lastTime = System.currentTimeMillis();
 	}
 	
-	public boolean inGame() {
+	//temporaire;
+	public static Texture getWorkerTexture () {
+		return workerTexture;
+	}
+	
+	public static boolean inGame() {
 		return network.isConnected();
 	}
 	
-	public static void createServer() {
-		network.createServer();
-	}
 	
-	public static void connectedServer() {
-		network.createClient();
+	public static void connectServer() {
+		network.connect();
 	}
 	
 	public static void sendCommand(String command) {
@@ -165,5 +176,14 @@ public class Game {
 
 	public static void createFactory(String name, int posX, int posY) {
 		players.get(0).addFactory(name, posX, posY);
+	}
+
+	public static void processMessage(Message message) {
+		String messageType = message.getClass().getSimpleName();
+		if(messageType.equals("PosMessage")) {
+			PosMessage posMessage = (PosMessage) message;
+			players.get(posMessage.getNumPlayer()).unitSetPos(posMessage.getNameUnit(), posMessage.getPosX(), posMessage.getPosY());
+		}
+		
 	}
 }

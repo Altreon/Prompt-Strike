@@ -11,15 +11,9 @@ public class Cannon extends Part{
 	//garder?
 	private final int ESTIMATETIME = 330;
 	private long startTime;
-	
-	private final int IMPACTRADIUS = 1;
-	private final int IMPACTDAMAGE = 1;
 
 	public Cannon () {
 		super(new Texture("Units/tank/cannon.png"));
-		
-		SPEEDMOVE = 0;
-		SPEEDROTATE = 1;
 	}
 	
 	@Override
@@ -46,7 +40,6 @@ public class Cannon extends Part{
 		float ImpactPosX = (float) (getX() + distance*64*Math.cos(Math.toRadians(getRotation())));
 		float ImpactPosY = (float) (getY() + distance*64*Math.sin(Math.toRadians(getRotation())));
 		
-		Game.applyDamage(ImpactPosX, ImpactPosY, IMPACTRADIUS, IMPACTDAMAGE, playerOwner);
 		Game.createEffect(new TankFire(firePosX, firePosY, getRotation() - 90));
 		Game.createEffect(new TankImpact(ImpactPosX, ImpactPosY, 0));
 	

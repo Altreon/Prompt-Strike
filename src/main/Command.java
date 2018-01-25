@@ -4,19 +4,30 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.Color;
 
+import display.InputScreen;
+
 public class Command {
 	
-	//garder?
-	private static int player = 0; 
+	private Game game;
+	private static InputScreen inputScreen;
 
 	
-	public static void loadWord () {
-		//word.add
+	public Command (Game game, InputScreen inputScreen) {
+		this.game = game;
+		this.inputScreen = inputScreen;
 	}
 
-	public static Color processCommand(String commandText) {
+	public static void processCommand(String commandText) {
+		if(!Game.inGame()) {
+			processLocalCommand(commandText);
+		}else {
+			Game.sendCommand(commandText);	
+		}
+			
+	}
+
+	private static void processLocalCommand(String commandText) {
 		boolean commandCorrect = false;
-		boolean localCommand = false;
 		
 		ArrayList<String> words = new ArrayList<String>();
 		for (String word : commandText.split(" ")) {
@@ -25,255 +36,65 @@ public class Command {
 		
 		String firstWord = words.remove(0);
 		
-		if (Game.getPlayers().get(player).isUnit(firstWord)) {
-			commandCorrect = unitCommand(firstWord, words);
-		}else if (Game.getPlayers().get(player).isStructure(firstWord)) {
-			commandCorrect = structCommand(firstWord, words);
-		}else {
-			localCommand = true;
+		if(firstWord.equals("connect")) {
 			commandCorrect = networkCommand(firstWord, words);
 		}
-		
 		if (commandCorrect) {
-			if(!localCommand) {
-				Game.sendCommand(commandText);
-			}
-			return Color.WHITE;
+			inputScreen.dispCommand(commandText, true);
 		}else{
-			return Color.RED;
+			inputScreen.dispCommand(commandText, false);
 		}
 			
 	}
-	
+
 	private static boolean networkCommand(String firstWord, ArrayList<String> words) {
 		if (words.size() != 0) {
 			return false;
 		}
 		
-		if (firstWord.equals("create")) {
-			return createServer(words);
-		}
 		if (firstWord.equals("connect")) {
 			return connectedServer(words);
 		}
 		
 		return false;
 	}
-
-	private static boolean createServer(ArrayList<String> words) {
-		Game.createServer();
-		return true;
-	}
 	
 	private static boolean connectedServer(ArrayList<String> words) {
-		Game.connectedServer();
+		Game.connectServer();
 		return true;
 	}
 
-	private static boolean unitCommand(String unitName, ArrayList<String> words) {
-		if (words.size() == 0) {
-			return false;
+	public static void processServerCommand(int numPlayer, String commandText, boolean correct) {
+		if(correct) {
+			ArrayList<String> words = new ArrayList<String>();
+			for (String word : commandText.split(" ")) {
+				words.add(word);
+			}
+			
+			String firstWord = words.remove(0);
+			
+			if(firstWord.equals("create")) {
+				addCommand(numPlayer, words);
+			}else if(firstWord.equals("player")) {
+				Game.getPlayers().add(new Player());
+			}
 		}
-		
-		String nextWord = words.remove(0);
-		
-		if (nextWord.equals("move") || nextWord.equals("m")) {
-			return move(unitName, words);
-		}
-		
-		if (nextWord.equals("rotate") || nextWord.equals("r")) {
-			return rotate(unitName, words);
-		}
-		
-		if (nextWord.equals("fire") || nextWord.equals("f")) {
-			return fire(unitName, words);
-		}
-		
-		if (nextWord.equals("build") || nextWord.equals("b")) {
-			return build(unitName, words);
-		}
-		
-		if (nextWord.equals("gather") || nextWord.equals("g")) {
-			return gather(unitName, words);
-		}
-		
-		return false;
-	}
-
-	private static boolean move(String unitName, ArrayList<String> words) {
-		if (words.size() == 1) {
-			return moveDir(unitName, words);
-		}else if (words.size() == 2) {
-			return movePos(unitName, words);
-		}else {
-			return false;
-		}
+		inputScreen.dispCommand(commandText, correct);
 	}
 	
-	private static boolean moveDir(String unitName, ArrayList<String> words) {
-		int value = 0;
-		try {
-			value = Integer.parseInt(words.get(0));
-		} catch(NumberFormatException e) {
-	        return false; 
-	    }
+	private static void addCommand(int numPlayer, ArrayList<String> words) {
+		String entityType = words.get(0);
+		String entityName = words.get(1);
+		int entityPosX = Integer.parseInt(words.get(2));
+		int entityPosY = Integer.parseInt(words.get(3));
 		
-		if(value >= -10 && value <= 10) {
-			Game.getPlayers().get(player).moveUnit(unitName, value);
-			return true;
+		if(entityType.equals("worker")) {
+			Game.createWorker(entityName, entityPosX, entityPosY);
+		}else if(entityType.equals("tank")) {
+			Game.createTank(entityName, entityPosX, entityPosY);
+		}else if(entityType.equals("factory")) {
+			Game.createFactory(entityName, entityPosX, entityPosY);
 		}
 		
-		return false;
 	}
-	
-	private static boolean movePos(String unitName, ArrayList<String> words) {
-		int posX = 0;
-		int posY = 0;
-		try {
-			posX = Integer.parseInt(words.get(0));
-			posY = Integer.parseInt(words.get(1));
-		} catch(NumberFormatException e) {
-	        return false; 
-	    }
-		
-		if(posX >= -10 && posX <= 10 && posY >= -10 && posY <= 10) {
-			Game.getPlayers().get(player).moveUnit(unitName, posX, posY);
-			return true;
-		}
-		
-		return false;
-	}
-	
-	private static boolean rotate(String unitName, ArrayList<String> words) {
-		if (words.size() == 0) {
-			return false;
-		}
-		
-		String nextWord = words.remove(0);
-		if(nextWord.equals("cannon") || nextWord.equals("c")) {
-			return rotateCannon(unitName, words);
-		}else {
-			return rotateUnit(unitName, nextWord, words);
-		}
-	}
-	
-	private static boolean rotateUnit(String unitName, String sValue, ArrayList<String> words) {
-		if (words.size() != 0) {
-			return false;
-		}
-		
-		int value = 0;
-		try {
-			value = Integer.parseInt(sValue);
-		} catch(NumberFormatException e) { 
-	        return false; 
-	    }
-		
-		if(value >= -360 && value <= 360) {
-			Game.getPlayers().get(player).rotateUnit(unitName, value);
-			return true;
-		}
-		
-		return false;
-	}
-	
-	private static boolean rotateCannon(String unitName, ArrayList<String> words) {
-		if (words.size() != 1 || !Game.getPlayers().get(player).unitCanRotateCannon(unitName)) {
-			return false;
-		}
-		
-		int value = 0;
-		try {
-			value = Integer.parseInt(words.get(0));
-		} catch(NumberFormatException e) { 
-	        return false; 
-	    }
-		
-		if(value >= -360 && value <= 360) {
-			Game.getPlayers().get(player).rotateCannon(unitName, value);
-			return true;
-		}
-		
-		return false;
-	}
-	
-	private static boolean fire(String unitName, ArrayList<String> words) {
-		if (words.size() != 1 || !Game.getPlayers().get(player).unitCanFire(unitName)) {
-			return false;
-		}
-		
-		int value = 0;
-		try {
-			value = Integer.parseInt(words.get(0));
-		} catch(NumberFormatException e) { 
-	        return false; 
-	    }
-		
-		if(value >= 1 && value <= 5) {
-			Game.getPlayers().get(player).fireUnit(unitName, value, player);
-			return true;
-		}
-		
-		return false;
-	}
-	
-	private static boolean build(String unitName, ArrayList<String> words) {
-		if (words.size() != 2) {
-			return false;
-		}
-		
-		String structType = words.get(0);
-		String structName = words.get(1);
-		
-		if(Game.getPlayers().get(player).unitCanBuild(unitName, structType, structName)) {
-			Game.getPlayers().get(player).buildUnit(unitName, structType, structName);
-			return true;
-		}
-		
-		return false;
-	}
-	
-	private static boolean gather (String unitName, ArrayList<String> words) {
-		if (words.size() != 0) {
-			return false;
-		}
-		
-		if(Game.getPlayers().get(player).unitCanGather(unitName)) {
-			Game.getPlayers().get(player).gatherUnit(unitName);
-			return true;
-		}
-		
-		return false;
-	}
-	
-	private static boolean structCommand(String structName, ArrayList<String> words) {
-		if (words.size() == 0) {
-			return false;
-		}
-		
-		String nextWord = words.remove(0);
-		
-		if (nextWord.equals("produce") || nextWord.equals("p")) {
-			return produce(structName, words);
-		}
-		
-		return false;
-	}
-
-	private static boolean produce(String structName, ArrayList<String> words) {
-		if (words.size() != 2) {
-			return false;
-		}
-		
-		String unitType = words.get(0);
-		String unitName = words.get(1);
-		
-		if(Game.getPlayers().get(player).structCanProduce(structName, unitType, unitName)) {
-			Game.getPlayers().get(player).structProduce(structName, unitType, unitName);
-			return true;
-		}
-		
-		return false;
-	}
-
 }

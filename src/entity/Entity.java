@@ -9,6 +9,7 @@ public abstract class Entity {
 	
 	public abstract void render(Batch batch);
 	public abstract void update(int dt);
+	public abstract void setPos(float posX, float posY);
 	public abstract float[] getPos();
 	
 	public Entity(String name) {

@@ -30,11 +30,6 @@ public class Player {
 		structures = new Hashtable<String, Structure>();
 		structuresToRemove = new ArrayList<Structure>();
 		
-		//units.put("tank", new Tank("tank", 1,1));
-		units.put("worker", new Worker("worker", 2,2));
-		
-		//structures.put("factory", new Factory("factory", 3,3));
-		
 		money = 100;
 	}
 	
@@ -64,16 +59,12 @@ public class Player {
 		return structures.containsKey(name);
 	}
 	
-	public void moveUnit(String name, int value) {
-		units.get(name).move(value);
+	public void unitSetPos(String name, float posX, float posY) {
+		units.get(name).setPos(posX, posY);
 	}
 	
-	public void moveUnit(String name, int posX, int posY) {
-		units.get(name).move(posX, posY);
-	}
-	
-	public void rotateUnit(String name, int value) {
-		units.get(name).rotate(value);
+	public void unitSetRotation(String name, float rotation) {
+		units.get(name).setRotation(rotation);
 	}
 	
 	public boolean unitCanRotateCannon(String name) {
@@ -94,39 +85,6 @@ public class Player {
 	
 	public boolean sufficientMoney(int cost) {
 		return money >= cost;
-	}
-	
-	public boolean unitCanBuild(String unitName, String structType, String structName) {
-		return units.get(unitName).getClass().getSimpleName().equals("Worker")
-				&& !structures.containsKey(structName)
-				&& !units.containsKey(structName)
-				&& ((Worker) units.get(unitName)).canBuild(structType);
-	}
-	
-	public void buildUnit(String unitName, String structType, String structName) {
-		((Worker) units.get(unitName)).build(structType, structName);
-		
-	}
-	
-	public boolean unitCanGather(String unitName) {
-		return units.get(unitName).getClass().getSimpleName().equals("Worker")
-				&& ((Worker) units.get(unitName)).canGather();
-	}
-	
-	public void gatherUnit(String unitName) {
-		((Worker) units.get(unitName)).gather();
-	}
-
-	public boolean structCanProduce(String structName, String unitType, String unitName) {
-		return structures.get(structName).getClass().getSimpleName().equals("Factory")
-				&& !units.containsKey(unitName)
-				&& !structures.containsKey(unitName)
-				&& ((Factory) structures.get(structName)).canProduce(unitType); //à généralisé dans class Structure
-	}
-
-	public void structProduce(String structName, String unitType, String unitName) {
-		((Factory) structures.get(structName)).produce(unitType, unitName);
-		
 	}
 	
 	public void addTank(String name, int posX, int posY) {
