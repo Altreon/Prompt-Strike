@@ -12,6 +12,7 @@ import entity.Unit;
 import math.MATH;
 import message.Message;
 import message.PosMessage;
+import message.RotMessage;
 import network.Network;
 
 public class Game {
@@ -183,6 +184,9 @@ public class Game {
 		if(messageType.equals("PosMessage")) {
 			PosMessage posMessage = (PosMessage) message;
 			players.get(posMessage.getNumPlayer()).unitSetPos(posMessage.getNameUnit(), posMessage.getPosX(), posMessage.getPosY());
+		}else if(messageType.equals("RotMessage")) {
+			RotMessage rotMessage = (RotMessage) message;
+			players.get(rotMessage.getNumPlayer()).unitSetRotation(rotMessage.getNameUnit(), rotMessage.getRotation());
 		}
 		
 	}
