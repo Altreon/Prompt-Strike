@@ -26,9 +26,11 @@ public class GameScreen{
 		for( Structure structure : Game.getAllstructures()) {
 			structure.render(batch);
 		}
-		
+		int i = 0;
 		for( Unit unit : Game.getAllUnits()) {
+			System.out.println(i + " : " + unit.getPos()[0]);
 			unit.render(batch);
+			i++;
 		}
 		
 		for (Effect effect : game.getEffects()) {

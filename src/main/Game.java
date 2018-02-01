@@ -10,9 +10,7 @@ import entity.Entity;
 import entity.Structure;
 import entity.Unit;
 import math.MATH;
-import message.Message;
-import message.PosMessage;
-import message.RotMessage;
+import message.*;
 import network.Network;
 
 public class Game {
@@ -179,14 +177,30 @@ public class Game {
 		players.get(0).addFactory(name, posX, posY);
 	}
 
-	public static void processMessage(Message message) {
-		String messageType = message.getClass().getSimpleName();
-		if(messageType.equals("PosMessage")) {
-			PosMessage posMessage = (PosMessage) message;
-			players.get(posMessage.getNumPlayer()).unitSetPos(posMessage.getNameUnit(), posMessage.getPosX(), posMessage.getPosY());
+	public static void processMessage(Message messageReceived) {
+		String messageType = messageReceived.getClass().getSimpleName();
+		
+		if(messageType.equals("CommandMessage")) {
+			CommandMessage message = (CommandMessage) messageReceived;
+			PromptStrike.getInputScreen().dispCommand(message.getCommand(), message.getCorrect());
+		}else if(messageType.equals("NewPlayerMessage")) {
+			NewPlayerMessage message = (NewPlayerMessage) messageReceived;
+			players.add(new Player());
+		}else if(messageType.equals("PosMessage")) {
+			PosMessage message = (PosMessage) messageReceived;
+			players.get(message.getNumPlayer()).unitSetPos(message.getNameUnit(), message.getPosX(), message.getPosY());
 		}else if(messageType.equals("RotMessage")) {
-			RotMessage rotMessage = (RotMessage) message;
-			players.get(rotMessage.getNumPlayer()).unitSetRotation(rotMessage.getNameUnit(), rotMessage.getRotation());
+			RotMessage message = (RotMessage) messageReceived;
+			players.get(message.getNumPlayer()).unitSetRotation(message.getNameUnit(), message.getRotation());
+		}else if(messageType.equals("CreateEntityMessage")) {
+			CreateEntityMessage message = (CreateEntityMessage) messageReceived;
+			if(message.getTypeEntity().equals("worker")) {
+				players.get(message.getNumPlayer()).addWorker(message.getNameEntity(), message.getPosX(), message.getPosY());
+			}else if(message.getTypeEntity().equals("tank")) {
+				players.get(message.getNumPlayer()).addTank(message.getNameEntity(), message.getPosX(), message.getPosY());
+			}else if(message.getTypeEntity().equals("factory")) {
+				players.get(message.getNumPlayer()).addFactory(message.getNameEntity(), message.getPosX(), message.getPosY());
+			}
 		}
 		
 	}

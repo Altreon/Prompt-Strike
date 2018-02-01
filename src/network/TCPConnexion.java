@@ -1,16 +1,22 @@
 package network;
 
+import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.DatagramPacket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
 import main.Command;
+import main.Game;
+import message.Message;
 
 public class TCPConnexion implements Runnable{
 	private Socket socket;
-	private DataInputStream streamIn;
+	private ObjectInputStream streamIn;
 	private DataOutputStream streamOut;
 
 	@Override
@@ -27,23 +33,20 @@ public class TCPConnexion implements Runnable{
 		}
 		if(socket != null) {
 			boolean connect = true;
-			while (connect) {  
-				try {  
-					int numPlayer = streamIn.readInt();
-					String line = streamIn.readUTF();
-					boolean correct = streamIn.readBoolean();
-			        Command.processServerCommand(numPlayer, line, correct);
-			    } catch(IOException ioe) {  
-			    	System.out.println("error: " + ioe.getMessage());
-			    	stop();
-			    	connect = false;
-			    }
+			while (connect) {
+				try {
+					receiveMessage();
+				} catch (IOException e) {
+					connect = false;
+					e.printStackTrace();
+				}
+				//Command.processServerCommand(numPlayer, line, correct);
 			}
 		}
 	}
 	
 	public void start() throws IOException{  
-		streamIn   = new DataInputStream(socket.getInputStream());
+		streamIn   = new ObjectInputStream(socket.getInputStream());
 	    streamOut = new DataOutputStream(socket.getOutputStream());
 	}
 	
@@ -58,8 +61,15 @@ public class TCPConnexion implements Runnable{
         }
     }
     
-	public void receiveData() {
-		
+	public void receiveMessage() throws IOException {
+		try {
+			Message message = (Message) streamIn.readObject();
+					
+			Game.processMessage(message);
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
     public void sendCommand (String command) {

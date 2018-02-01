@@ -12,7 +12,7 @@ public class Worker extends Unit{
 
 	private Part sprite;
 	
-	public Worker (String name, int posX, int posY) {
+	public Worker (String name, float posX, float posY) {
 		super(name);
 		posX = posX + 224;
 		//a changer...

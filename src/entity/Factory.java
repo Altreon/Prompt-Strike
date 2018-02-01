@@ -7,7 +7,7 @@ import main.Game;
 
 public class Factory extends Structure{
 	
-	public Factory(String name, int posX, int posY) {
+	public Factory(String name, float posX, float posY) {
 		super(name, new Sprite(new Texture("Structures/factory.png")), posX, posY);
 	}
 	

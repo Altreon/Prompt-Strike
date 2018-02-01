@@ -12,7 +12,7 @@ public class Tank extends Unit {
 	
 	private Part[] parts;
 
-	public Tank (String name, int posX, int posY) {
+	public Tank (String name, float posX, float posY) {
 		super(name);
 		posX = posX * 64 + 224;
 		posY *= 64;

@@ -87,16 +87,16 @@ public class Player {
 		return money >= cost;
 	}
 	
-	public void addTank(String name, int posX, int posY) {
+	public void addTank(String name, float posX, float posY) {
 		units.put(name, new Tank(name, posX, posY));
 		
 	}
 	
-	public void addWorker(String name, int posX, int posY) {
-		units.put(name, new Worker(name, posX, posY));
+	public void addWorker(String name, float f, float g) {
+		units.put(name, new Worker(name, f, g));
 	}
 	
-	public void addFactory(String name, int posX, int posY) {
+	public void addFactory(String name, float posX, float posY) {
 		structures.put(name, new Factory(name, posX, posY));
 	}
 

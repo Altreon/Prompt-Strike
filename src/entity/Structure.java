@@ -5,12 +5,12 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 
 public abstract class Structure extends Entity{
 	
-	protected int posX;
-	protected int posY;
+	protected float posX;
+	protected float posY;
 	
 	private Sprite sprite;
 	
-	public Structure (String name, Sprite sprite, int posX, int posY) {
+	public Structure (String name, Sprite sprite, float posX, float posY) {
 		super(name);
 		this.sprite = sprite;
 		

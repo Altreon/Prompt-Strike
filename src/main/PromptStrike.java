@@ -6,11 +6,12 @@ package main;
 import com.badlogic.gdx.Game;
 
 import display.GameDisplay;
+import display.InputScreen;
 public class PromptStrike extends Game {
 	
 	private main.Game game;
 	
-	private GameDisplay gameDisplay;
+	private static GameDisplay gameDisplay;
 	// private InputWindows
 	// private OutputWindows
 	
@@ -35,5 +36,9 @@ public class PromptStrike extends Game {
 	@Override
 	public void dispose () {
 	
+	}
+	
+	public static InputScreen getInputScreen() {
+		return gameDisplay.getInputScreen();
 	}
 }
