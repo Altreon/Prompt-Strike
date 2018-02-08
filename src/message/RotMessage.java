@@ -8,11 +8,13 @@ public class RotMessage extends Message{
 	private int numPlayer;
 	private String nameUnit;
 	private float rotation;
+	private int idPart;
 	
-	public RotMessage (int numPlayer, String nameUnit, float rotation) {
+	public RotMessage (int numPlayer, String nameUnit, float rotation, int idPart) {
 		this.numPlayer = numPlayer;
 		this.nameUnit = nameUnit;
 		this.rotation = rotation;
+		this.idPart = idPart;
 	}
 	
 	public int getNumPlayer() {
@@ -26,5 +28,9 @@ public class RotMessage extends Message{
 	
 	public float getRotation() {
 		return rotation;
+	}
+	
+	public int getIdPart() {
+		return idPart;
 	}	
 }

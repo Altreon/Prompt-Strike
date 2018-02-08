@@ -13,13 +13,13 @@ public class Cannon extends Part{
 	private long startTime;
 
 	public Cannon () {
-		super(new Texture("Units/tank/cannon.png"));
+		super(Textures.getTexture(TEXTURE.TankCannon));
 	}
 	
-	@Override
+	/*@Override
 	public boolean isMoving () {
 		return false;
-	}
+	}*/
 	
 	//garder?
 	public void update (float x, float y) {
@@ -33,7 +33,7 @@ public class Cannon extends Part{
 		}
 	}
 
-	public void fire(int distance, int playerOwner) {
+	/*public void fire(int distance, int playerOwner) {
 		float firePosX = (float) (getX() + getWidth()/1.3f*Math.cos(Math.toRadians(getRotation())));
 		float firePosY = (float) (getY() + getHeight()/1.3f*Math.sin(Math.toRadians(getRotation())));
 		
@@ -47,5 +47,18 @@ public class Cannon extends Part{
 		setY((float) (getY() - getHeight()/5*Math.sin(Math.toRadians(getRotation()))));
 		
 		startTime = System.currentTimeMillis();
+	}*/
+
+	public void fire() {
+		float firePosX = (float) (getX() + getWidth()/1.3f*Math.cos(Math.toRadians(getRotation())));
+		float firePosY = (float) (getY() + getHeight()/1.3f*Math.sin(Math.toRadians(getRotation())));
+		
+		Game.createEffect(new TankFire(firePosX, firePosY, getRotation() - 90));
+	
+		setX((float) (getX() - getWidth()/5*Math.cos(Math.toRadians(getRotation()))));
+		setY((float) (getY() - getHeight()/5*Math.sin(Math.toRadians(getRotation()))));
+		
+		startTime = System.currentTimeMillis();
+		
 	}
 }

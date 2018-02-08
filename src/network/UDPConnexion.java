@@ -7,8 +7,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.MulticastSocket;
 import java.net.Socket;
+import java.net.SocketAddress;
 import java.net.UnknownHostException;
 
 import main.Command;
@@ -18,15 +21,14 @@ import message.PosMessage;
 
 public class UDPConnexion implements Runnable{
 	
-	public static int port = 2345;
+	public int port = 2345;
 	
-	//private DatagramSocket socket;
-	private MulticastSocket socket;
+	private DatagramSocket socket;
 
 	@Override
 	public void run() {
-		try {  
-			socket = new MulticastSocket(port);
+		try { 
+			socket = new DatagramSocket(port);
 		} catch(IOException ioe) {  
 			System.out.println("Unexpected exception: " + ioe.getMessage());
 		}
@@ -34,7 +36,7 @@ public class UDPConnexion implements Runnable{
 			boolean connect = true;
 			while (connect) {  
 				try {  
-					byte[] buffer = new byte[8192];
+					byte[] buffer = new byte[256];
 	                DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
 	                
 	                socket.receive(packet);
@@ -56,9 +58,6 @@ public class UDPConnexion implements Runnable{
 		this.port = port;
 	}
 	
-	public int getPort() {
-		return port;
-	}
 	
 	public void stop(){  
     	socket.close();

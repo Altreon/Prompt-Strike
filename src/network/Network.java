@@ -17,15 +17,22 @@ public class Network {
 		TCPThread.start();
 		
 		UDPConnexion = new UDPConnexion();
+		while(!isConnected()) {try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}};
+		UDPConnexion.setPort(TCPConnexion.getSocket().getLocalPort());
 		UDPThread = new Thread(UDPConnexion);
 		UDPThread.start();
 	}
 
 	public void sendCommand(String command) {
-		TCPConnexion.sendCommand(command);		
+		TCPConnexion.sendCommand(command);
 	}
 
 	public boolean isConnected() {
-		return TCPConnexion != null;
+		return TCPConnexion != null && TCPConnexion.getSocket() != null;
 	}
 }

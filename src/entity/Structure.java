@@ -5,37 +5,18 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 
 public abstract class Structure extends Entity{
 	
-	protected float posX;
-	protected float posY;
+	private Sprite building;
 	
-	private Sprite sprite;
-	
-	public Structure (String name, Sprite sprite, float posX, float posY) {
-		super(name);
-		this.sprite = sprite;
+	public Structure (String name, Sprite building, float posX, float posY) {
+		super(name, posX, posY);
+		this.building = building;
 		
-		this.posX = posX;
-		this.posY = posY;
+		posX = posX + 224;
 		
-		posX = posX * 64 + 224;
-		posY *= 64;
-		
-		sprite.setPosition(posX, posY);
+		building.setPosition(posX, posY);
 	}
 	
-	@Override
 	public void render(Batch batch) {
-		sprite.draw(batch);
+		building.draw(batch);
 	}
-	
-	@Override
-	public float[] getPos() {
-		return new float[]{sprite.getX(), sprite.getY()};
-	}
-	
-	@Override
-	public void setPos(float posX, float posY) {
-		sprite.setPosition(posX, posY);
-	}
-	
 }

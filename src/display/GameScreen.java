@@ -28,7 +28,6 @@ public class GameScreen{
 		}
 		int i = 0;
 		for( Unit unit : Game.getAllUnits()) {
-			System.out.println(i + " : " + unit.getPos()[0]);
 			unit.render(batch);
 			i++;
 		}

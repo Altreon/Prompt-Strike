@@ -6,6 +6,7 @@ import java.util.Map;
 
 import display.OutputScreen;
 import effet.Effect;
+import effet.TankFire;
 import entity.Entity;
 import entity.Factory;
 import entity.Structure;
@@ -17,11 +18,11 @@ public class Player {
 	
 	private int money;
 	
-	private static Hashtable<String, Unit> units;
-	private static ArrayList<Unit> unitsToRemove;
+	private Hashtable<String, Unit> units;
+	private ArrayList<Unit> unitsToRemove;
 	
-	private static Hashtable<String, Structure> structures;
-	private static ArrayList<Structure> structuresToRemove;
+	private Hashtable<String, Structure> structures;
+	private ArrayList<Structure> structuresToRemove;
 	
 	public Player () {
 		units = new Hashtable<String, Unit>();
@@ -63,24 +64,24 @@ public class Player {
 		units.get(name).setPos(posX, posY);
 	}
 	
-	public void unitSetRotation(String name, float rotation) {
-		units.get(name).setRotation(rotation);
+	public void unitSetRotation(String name, float rotation, int idPart) {
+		units.get(name).setRotation(rotation, idPart);
 	}
 	
 	public boolean unitCanRotateCannon(String name) {
 		return units.get(name).getClass().getSimpleName().equals("Tank");
 	}
 	
-	public void rotateCannon(String name, int value) {
-		((Tank) units.get(name)).rotateCannon(value);
-	}
-	
 	public boolean unitCanFire(String name) {
 		return units.get(name).getClass().getSimpleName().equals("Tank");
 	}
 	
-	public void fireUnit(String name, int value, int playerOwner) {
+	/*public void fireUnit(String nameUnit, int value, int playerOwner) {
 		((Tank) units.get(name)).fire(value, playerOwner);
+	}*/
+	
+	public void fireUnit(String name) {
+		((Tank) units.get(name)).fire();
 	}
 	
 	public boolean sufficientMoney(int cost) {
@@ -100,12 +101,21 @@ public class Player {
 		structures.put(name, new Factory(name, posX, posY));
 	}
 
-	public void destroyEntity(Entity entity) {
+	/*public void destroyEntity(Entity entity) {
 		String entityClass = entity.getClass().getSuperclass().getSimpleName();
 		if(entityClass.equals("Unit")) {
 			units.remove(entity.getName());
 		}else {
 			structures.remove(entity.getName());
+		}
+		
+	}*/
+
+	public void destroyEntity(String typeEntity, String nameEntity) {
+		if(typeEntity.equals("Unit")) {
+			units.remove(nameEntity);
+		}else {
+			structures.remove(nameEntity);
 		}
 		
 	}

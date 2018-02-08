@@ -8,13 +8,13 @@ public class Chassis extends Part{
 	private Sprite attachPart;
 	
 	public Chassis (Sprite attachPart) {
-		super(new Texture("Units/tank/chassis.png"));
+		super(Textures.getTexture(TEXTURE.TankChassis));
 		
 		this.attachPart = attachPart;
 	}
 	
-	@Override
+	/*@Override
 	public void updateMove () {
 		
-	}
+	}*/
 }

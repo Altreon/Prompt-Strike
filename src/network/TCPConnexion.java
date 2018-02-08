@@ -31,6 +31,7 @@ public class TCPConnexion implements Runnable{
 		} catch(IOException ioe) {  
 			System.out.println("Unexpected exception: " + ioe.getMessage());
 		}
+		
 		if(socket != null) {
 			boolean connect = true;
 			while (connect) {
@@ -60,6 +61,10 @@ public class TCPConnexion implements Runnable{
     	  System.out.println("Error closing ...");
         }
     }
+	
+	public Socket getSocket() {
+		return socket;
+	}
     
 	public void receiveMessage() throws IOException {
 		try {

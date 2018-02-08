@@ -5,9 +5,10 @@ import java.util.Enumeration;
 
 import com.badlogic.gdx.graphics.Texture;
 
-import effet.Effect;
+import effet.*;
 import entity.Entity;
 import entity.Structure;
+import entity.Textures;
 import entity.Unit;
 import math.MATH;
 import message.*;
@@ -24,11 +25,10 @@ public class Game {
 	
 	private static Network network;
 	
-	//temporaire
-	private static Texture workerTexture;
-	
 	
 	public Game () {
+		Textures.initialize();
+		
 		players = new ArrayList<Player>();
 		//players.add(new Player());
 		
@@ -36,15 +36,8 @@ public class Game {
 		effectsToRemove = new ArrayList<Effect>();
 		
 		network = new Network();
-		
-		workerTexture = new Texture("Units/worker.png");
-		
+				
 		lastTime = System.currentTimeMillis();
-	}
-	
-	//temporaire;
-	public static Texture getWorkerTexture () {
-		return workerTexture;
 	}
 	
 	public static boolean inGame() {
@@ -102,13 +95,13 @@ public class Game {
 		long currentTime = System.currentTimeMillis();
 		int dt = (int) (System.currentTimeMillis() - lastTime);
 		
-		for( Structure structure : getAllstructures()) {
+		/*for( Structure structure : getAllstructures()) {
 			structure.update(dt);
 		}
 		
 		for( Unit unit : getAllUnits()) {
 			unit.update(dt);
-		}
+		}*/
 		
 		for (Effect effect : effects) {
 			effect.timeDecrease(dt);
@@ -136,7 +129,7 @@ public class Game {
 		players.get(0).removeMoney(amont);
 	}
 	
-	public static void applyDamage(float posX, float posY, int radius, int amount, int playerExluded) {
+	/*public static void applyDamage(float posX, float posY, int radius, int amount, int playerExluded) {
 		ArrayList<Entity> entityTouched = new ArrayList<Entity>();
 		for (Unit unit : getAllUnits()) {
 			float[] posDamageUnit = {unit.getPos()[0] - posX, unit.getPos()[1] - posY};
@@ -163,7 +156,7 @@ public class Game {
 			}
 		}
 		
-	}
+	}*/
 
 	public static void createTank(String name, int posX, int posY) {
 		players.get(0).addTank(name, posX, posY);
@@ -191,7 +184,7 @@ public class Game {
 			players.get(message.getNumPlayer()).unitSetPos(message.getNameUnit(), message.getPosX(), message.getPosY());
 		}else if(messageType.equals("RotMessage")) {
 			RotMessage message = (RotMessage) messageReceived;
-			players.get(message.getNumPlayer()).unitSetRotation(message.getNameUnit(), message.getRotation());
+			players.get(message.getNumPlayer()).unitSetRotation(message.getNameUnit(), message.getRotation(), message.getIdPart());
 		}else if(messageType.equals("CreateEntityMessage")) {
 			CreateEntityMessage message = (CreateEntityMessage) messageReceived;
 			if(message.getTypeEntity().equals("worker")) {
@@ -201,7 +194,13 @@ public class Game {
 			}else if(message.getTypeEntity().equals("factory")) {
 				players.get(message.getNumPlayer()).addFactory(message.getNameEntity(), message.getPosX(), message.getPosY());
 			}
+		}else if(messageType.equals("DestroyEntityMessage")) {
+			DestroyEntityMessage message = (DestroyEntityMessage) messageReceived;
+			players.get(message.getNumPlayer()).destroyEntity(message.getTypeEntity(), message.getNameEntity());
+		}else if(messageType.equals("FireMessage")) {
+			FireMessage message = (FireMessage) messageReceived;
+			players.get(message.getNumPlayer()).fireUnit(message.getNameUnit());
+			createEffect(new TankImpact(message.getImpactPosX() + 224, message.getImpactPosY(), 0));
 		}
-		
 	}
 }

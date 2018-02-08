@@ -10,51 +10,19 @@ public class Worker extends Unit{
 	
 	private static final int COST = 10;
 
-	private Part sprite;
+	private Part body;
 	
 	public Worker (String name, float posX, float posY) {
-		super(name);
+		super(name, posX, posY, 1);
 		posX = posX + 224;
-		//a changer...
-		sprite = new Part(Game.getWorkerTexture());
-		sprite.setPosition(posX, posY);
+		
+		body = new Part(Textures.getTexture(TEXTURE.Worker));
+		body.setPosition(posX, posY);
+		parts[0] = body;
 		
 	}
 	
 	public static int getCost () {
 		return COST;
 	}
-	
-	@Override
-	public float[] getPos() {
-		return new float[]{sprite.getX(), sprite.getY()};
-	}
-	
-	@Override
-	public void setPos(float posX, float posY) {
-		sprite.setPosition(posX, posY);
-		
-	}
-	
-	@Override
-	public void render(Batch batch) {
-		sprite.draw(batch);
-		
-	}
-
-	@Override
-	public void update(int dt) {
-		
-	}
-
-	@Override
-	protected float getRotation() {
-		return sprite.getRotation();
-	}
-	
-	@Override
-	public void setRotation(float rotation) {
-		sprite.setRotation(rotation);
-	}
-
 }
