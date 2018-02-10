@@ -12,7 +12,6 @@ public class Map {
 	static Ressource[][] ressources;
 	
 	public Map() {
-		loadSprite();
 		map = new Tile[13][11];
 		for (int i=0; i < map.length; i++) {
 			for (int j=0; j < map[0].length; j++) {
@@ -24,10 +23,6 @@ public class Map {
 		ressources = new Ressource[13][11];
 		ressources[4][0] = new Ressource("crystal", 4, 0);
 		
-	}
-
-	private void loadSprite() {
-		grass = new Sprite(new Texture("Tiles/grass.png"));
 	}
 	
 	public void render (Batch batch) {

@@ -26,7 +26,7 @@ public class OutputScreen{
 
 		commandsDisplay = new ArrayList<Label>();
 		
-		moneyDisp = new Label("MONEY : 100", uiSkin);
+		moneyDisp = new Label("MONEY : 0", uiSkin);
 		moneyDisp.setPosition(0, 0);
 		
 		stage = new Stage();

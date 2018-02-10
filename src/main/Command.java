@@ -48,23 +48,24 @@ public class Command {
 	}
 
 	private static boolean networkCommand(String firstWord, ArrayList<String> words) {
-		if (words.size() != 0) {
+		if (words.size() != 1) {
 			return false;
 		}
 		
+		String IPAddress = words.get(0);
+		
 		if (firstWord.equals("connect")) {
-			return connectedServer(words);
+			return connectedServer(IPAddress);
 		}
 		
 		return false;
 	}
 	
-	private static boolean connectedServer(ArrayList<String> words) {
-		Game.connectServer();
-		return true;
+	private static boolean connectedServer(String IPAddress) {
+		return Game.connectServer(IPAddress);
 	}
 
-	public static void processServerCommand(int numPlayer, String commandText, boolean correct) {
+	/*public static void processServerCommand(int numPlayer, String commandText, boolean correct) {
 		if(correct) {
 			ArrayList<String> words = new ArrayList<String>();
 			for (String word : commandText.split(" ")) {
@@ -80,9 +81,9 @@ public class Command {
 			}
 		}
 		inputScreen.dispCommand(commandText, correct);
-	}
+	}*/
 	
-	private static void addCommand(int numPlayer, ArrayList<String> words) {
+	/*private static void addCommand(int numPlayer, ArrayList<String> words) {
 		String entityType = words.get(0);
 		String entityName = words.get(1);
 		int entityPosX = Integer.parseInt(words.get(2));
@@ -96,5 +97,5 @@ public class Command {
 			Game.createFactory(entityName, entityPosX, entityPosY);
 		}
 		
-	}
+	}*/
 }

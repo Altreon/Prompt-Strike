@@ -21,13 +21,8 @@ public class TCPConnexion implements Runnable{
 
 	@Override
 	public void run() {
-		System.out.println("Establishing connection...");
 		try {  
-			socket = new Socket("127.0.0.1", 10);
-		    System.out.println("Connected: " + socket);
 		    start();
-		} catch(UnknownHostException uhe) {
-			System.out.println("Host unknown: " + uhe.getMessage());
 		} catch(IOException ioe) {  
 			System.out.println("Unexpected exception: " + ioe.getMessage());
 		}
@@ -44,6 +39,24 @@ public class TCPConnexion implements Runnable{
 				//Command.processServerCommand(numPlayer, line, correct);
 			}
 		}
+	}
+	
+	public boolean connect(String IPAddress) {
+		System.out.println("Establishing connection at " + IPAddress + "...");
+		try {
+			socket = new Socket(IPAddress, 10);
+		} catch (UnknownHostException e) {
+			//e.printStackTrace();
+			System.out.println("incorrect IP address");
+			return false;
+		} catch (IOException e) {
+			//e.printStackTrace();
+			System.out.println("connexion has failed!");
+			return false;
+		}
+	    System.out.println("Connected: " + socket);
+	    return true;
+		
 	}
 	
 	public void start() throws IOException{  

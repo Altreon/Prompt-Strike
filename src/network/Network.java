@@ -11,25 +11,34 @@ public class Network {
 		
 	}
 	
-	public void connect () {
-		TCPConnexion = new TCPConnexion();
-		TCPThread = new Thread(TCPConnexion);
-		TCPThread.start();
-		
-		UDPConnexion = new UDPConnexion();
-		while(!isConnected()) {try {
-			Thread.sleep(100);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}};
-		UDPConnexion.setPort(TCPConnexion.getSocket().getLocalPort());
-		UDPThread = new Thread(UDPConnexion);
-		UDPThread.start();
+	public boolean connect (String iPAddress) {
+		if(tryConnect(iPAddress)) {
+			TCPThread = new Thread(TCPConnexion);
+			TCPThread.start();
+			
+			UDPConnexion = new UDPConnexion();
+			while(!isConnected()) {try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}};
+			UDPConnexion.setPort(TCPConnexion.getSocket().getLocalPort());
+			UDPThread = new Thread(UDPConnexion);
+			UDPThread.start();
+			return true;
+		}else {
+			return false;
+		}
 	}
 
 	public void sendCommand(String command) {
 		TCPConnexion.sendCommand(command);
+	}
+	
+	private boolean tryConnect(String iPAddress) {
+		TCPConnexion = new TCPConnexion();
+		return TCPConnexion.connect(iPAddress);
 	}
 
 	public boolean isConnected() {

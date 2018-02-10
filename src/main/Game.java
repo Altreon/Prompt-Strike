@@ -45,8 +45,8 @@ public class Game {
 	}
 	
 	
-	public static void connectServer() {
-		network.connect();
+	public static boolean connectServer(String iPAddress) {
+		return network.connect(iPAddress);
 	}
 	
 	public static void sendCommand(String command) {
@@ -121,14 +121,6 @@ public class Game {
 		effectsToRemove.clear();
 	}
 	
-	public static void addMoney(int amont) {
-		players.get(0).addMoney(amont);
-	}
-	
-	public static void removeMoney(int amont) {
-		players.get(0).removeMoney(amont);
-	}
-	
 	/*public static void applyDamage(float posX, float posY, int radius, int amount, int playerExluded) {
 		ArrayList<Entity> entityTouched = new ArrayList<Entity>();
 		for (Unit unit : getAllUnits()) {
@@ -158,7 +150,7 @@ public class Game {
 		
 	}*/
 
-	public static void createTank(String name, int posX, int posY) {
+	/*public static void createTank(String name, int posX, int posY) {
 		players.get(0).addTank(name, posX, posY);
 	}
 	
@@ -168,7 +160,7 @@ public class Game {
 
 	public static void createFactory(String name, int posX, int posY) {
 		players.get(0).addFactory(name, posX, posY);
-	}
+	}*/
 
 	public static void processMessage(Message messageReceived) {
 		String messageType = messageReceived.getClass().getSimpleName();
@@ -201,6 +193,9 @@ public class Game {
 			FireMessage message = (FireMessage) messageReceived;
 			players.get(message.getNumPlayer()).fireUnit(message.getNameUnit());
 			createEffect(new TankImpact(message.getImpactPosX() + 224, message.getImpactPosY(), 0));
+		}else if(messageType.equals("UpdateMoneyMessage")) {
+			UpdateMoneyMessage message = (UpdateMoneyMessage) messageReceived;
+			players.get(message.getNumPlayer()).updateMoney(message.getMoney());
 		}
 	}
 }

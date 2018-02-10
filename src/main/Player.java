@@ -30,17 +30,10 @@ public class Player {
 		
 		structures = new Hashtable<String, Structure>();
 		structuresToRemove = new ArrayList<Structure>();
-		
-		money = 100;
 	}
 	
-	public void addMoney(int amont) {
-		money += amont;
-		OutputScreen.updateMoney(money);
-	}
-	
-	public void removeMoney(int amont) {
-		money -= amont;
+	public void updateMoney(int amount) {
+		money = amount;
 		OutputScreen.updateMoney(money);
 	}
 	
