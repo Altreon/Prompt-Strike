@@ -55,8 +55,7 @@ public class TCPConnexion implements Runnable{
 			return false;
 		}
 	    System.out.println("Connected: " + socket);
-	    return true;
-		
+	    return true;		
 	}
 	
 	public void start() throws IOException{  

@@ -8,22 +8,31 @@ import display.InputScreen;
 
 public class Command {
 	
-	private Game game;
+	private static Game game;
 	private static InputScreen inputScreen;
 
 	
 	public Command (Game game, InputScreen inputScreen) {
-		this.game = game;
-		this.inputScreen = inputScreen;
+		Command.game = game;
+		Command.inputScreen = inputScreen;
 	}
 
 	public static void processCommand(String commandText) {
-		if(!Game.inGame()) {
+		ArrayList<String> words = new ArrayList<String>();
+		for (String word : commandText.split(" ")) {
+			words.add(word);
+		}
+		
+		if(isLocalCommand(words.get(0))) {
 			processLocalCommand(commandText);
-		}else {
-			Game.sendCommand(commandText);	
+		}else if(game.inGame()){
+			Game.sendCommand(commandText);
 		}
 			
+	}
+	
+	private static boolean isLocalCommand(String firstWord) {
+		return firstWord.equals("connect") || firstWord.equals("movecam") || firstWord.equals("mc");
 	}
 
 	private static void processLocalCommand(String commandText) {
@@ -38,16 +47,17 @@ public class Command {
 		
 		if(firstWord.equals("connect")) {
 			commandCorrect = networkCommand(firstWord, words);
+		}else if(firstWord.equals("movecam") || firstWord.equals("mc")) {
+			commandCorrect = moveCamCommand(firstWord, words);
 		}
 		if (commandCorrect) {
 			inputScreen.dispCommand(commandText, true);
 		}else{
 			inputScreen.dispCommand(commandText, false);
-		}
-			
+		}	
 	}
 
-	private static boolean networkCommand(String firstWord, ArrayList<String> words) {
+	/*private static boolean networkCommand(String firstWord, ArrayList<String> words) {
 		if (words.size() != 1) {
 			return false;
 		}
@@ -59,10 +69,42 @@ public class Command {
 		}
 		
 		return false;
+	}*/
+	
+	private static boolean networkCommand(String firstWord, ArrayList<String> words) {
+		if (words.size() != 0) {
+			return false;
+		}
+		
+		String IPAddress = "127.0.0.1";
+		
+		if (firstWord.equals("connect")) {
+			return connectedServer(IPAddress);
+		}
+	
+		return false;
 	}
 	
 	private static boolean connectedServer(String IPAddress) {
 		return Game.connectServer(IPAddress);
+	}
+	
+	private static boolean moveCamCommand(String firstWord, ArrayList<String> words) {
+		if (words.size() != 2) {
+			return false;
+		}
+		
+		float[] camMove = new float[2];
+		try {
+			camMove[0] = Integer.parseInt(words.get(0));
+			camMove[1] = Integer.parseInt(words.get(1));
+		} catch(NumberFormatException e) {
+	        return false; 
+	    }
+		
+		game.moveCam(camMove);
+		
+		return true;
 	}
 
 	/*public static void processServerCommand(int numPlayer, String commandText, boolean correct) {

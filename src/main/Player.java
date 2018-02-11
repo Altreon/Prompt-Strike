@@ -7,12 +7,7 @@ import java.util.Map;
 import display.OutputScreen;
 import effet.Effect;
 import effet.TankFire;
-import entity.Entity;
-import entity.Factory;
-import entity.Structure;
-import entity.Tank;
-import entity.Unit;
-import entity.Worker;
+import entity.*;
 
 public class Player {
 	
@@ -88,6 +83,10 @@ public class Player {
 	
 	public void addWorker(String name, float f, float g) {
 		units.put(name, new Worker(name, f, g));
+	}
+	
+	public void addHeadquarter(String name, float posX, float posY) {
+		structures.put(name, new Headquarter(name, posX, posY));
 	}
 	
 	public void addFactory(String name, float posX, float posY) {

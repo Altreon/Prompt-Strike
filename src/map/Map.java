@@ -1,15 +1,17 @@
 package map;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
 public class Map {
 	
-	Sprite grass;
+	private Sprite grass;
 	
-	static Tile[][] map;
-	static Ressource[][] ressources;
+	private Tile[][] map;
+	private static Ressource[][] ressources;
 	
 	public Map() {
 		map = new Tile[13][11];
@@ -41,7 +43,28 @@ public class Map {
 		}
 	}
 	
-	static public String getRessourceType(int posX, int posY) {
+	public ArrayList<Tile> getTile() {
+		ArrayList<Tile> tiles = new ArrayList<Tile>();
+		
+		for (int i=0; i < map.length; i++) {
+			for (int j=0; j < map[0].length; j++) {
+				tiles.add(map[i][j]);
+			}
+		}
+		
+		for (int i=0; i < ressources.length; i++) {
+			for (int j=0; j < ressources[0].length; j++) {
+				if(ressources[i][j] != null) {
+					tiles.add(ressources[i][j]);
+				}
+			}
+		}
+		
+		return tiles;
+		
+	}
+	
+	public static String getRessourceType(int posX, int posY) {
 		if(ressources[posX][posY] != null) {
 			return ressources[posX][posY].getType();
 		}else {

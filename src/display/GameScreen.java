@@ -13,15 +13,13 @@ import map.Map;
 public class GameScreen{
 	
 	private Game game;
-	private Map map;
 	
 	public GameScreen (Game game) {
 		this.game = game;
-		map = new Map();
 	}
 	
 	public void render (Batch batch) {
-		map.render(batch);
+		game.getMap().render(batch);
 		
 		for( Structure structure : Game.getAllstructures()) {
 			structure.render(batch);

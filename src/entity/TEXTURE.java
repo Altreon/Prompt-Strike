@@ -6,10 +6,11 @@ public enum TEXTURE {
 	TankChassis ("Units/tank/chassis.png"),
 	TankCannon ("Units/tank/cannon.png"),
 	  
+	Headquarter ("Structures/headquarter.png"),
 	Factory ("Structures/factory.png"),
 	
-	TankFire ("effects/tankFire.png"),
-	TankImpact ("effects/tankImpact.png");
+	TankFire ("Effects/tankFire.png"),
+	TankImpact ("Effects/tankImpact.png");
 
 	private String texturePath;
 

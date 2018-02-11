@@ -14,7 +14,6 @@ public class Worker extends Unit{
 	
 	public Worker (String name, float posX, float posY) {
 		super(name, posX, posY, 1);
-		posX = posX + 224;
 		
 		body = new Part(Textures.getTexture(TEXTURE.Worker));
 		body.setPosition(posX, posY);

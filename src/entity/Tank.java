@@ -12,7 +12,6 @@ public class Tank extends Unit {
 
 	public Tank (String name, float posX, float posY) {
 		super(name, posX, posY, 2);
-		posX = posX + 224;
 		
 		cannon = new Cannon();
 		cannon.setPosition(posX, posY);

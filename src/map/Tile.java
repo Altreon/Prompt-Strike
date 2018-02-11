@@ -17,8 +17,12 @@ public class Tile {
 		sprite.draw(batch);
 	}
 	
-	public void setPos(int posX, int posY) {
+	public void setPos(float posX, float posY) {
 		sprite.setPosition(posX, posY);
+	}
+	
+	public float[] getPos() {
+		return new float[] {sprite.getX(), sprite.getY()};
 	}
 
 	public String getType() {

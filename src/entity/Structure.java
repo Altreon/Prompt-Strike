@@ -10,13 +10,16 @@ public abstract class Structure extends Entity{
 	public Structure (String name, Sprite building, float posX, float posY) {
 		super(name, posX, posY);
 		this.building = building;
-		
-		posX = posX + 224;
-		
+				
 		building.setPosition(posX, posY);
 	}
 	
 	public void render(Batch batch) {
 		building.draw(batch);
+	}
+	
+	public void setPos(float posX, float posY) {
+		super.setPos(posX, posY);
+		building.setPosition(posX, posY);
 	}
 }

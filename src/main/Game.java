@@ -10,6 +10,8 @@ import entity.Entity;
 import entity.Structure;
 import entity.Textures;
 import entity.Unit;
+import map.Map;
+import map.Tile;
 import math.MATH;
 import message.*;
 import network.Network;
@@ -25,6 +27,10 @@ public class Game {
 	
 	private static Network network;
 	
+	private static float[] offset;
+	
+	private Map map;
+	
 	
 	public Game () {
 		Textures.initialize();
@@ -36,11 +42,15 @@ public class Game {
 		effectsToRemove = new ArrayList<Effect>();
 		
 		network = new Network();
+		
+		offset = new float[] {0,0};
+		
+		map = new Map();
 				
 		lastTime = System.currentTimeMillis();
 	}
 	
-	public static boolean inGame() {
+	public boolean inGame() {
 		return network.isConnected();
 	}
 	
@@ -173,18 +183,20 @@ public class Game {
 			players.add(new Player());
 		}else if(messageType.equals("PosMessage")) {
 			PosMessage message = (PosMessage) messageReceived;
-			players.get(message.getNumPlayer()).unitSetPos(message.getNameUnit(), message.getPosX(), message.getPosY());
+			players.get(message.getNumPlayer()).unitSetPos(message.getNameUnit(), message.getPosX() + offset[0], message.getPosY() + offset[1]);
 		}else if(messageType.equals("RotMessage")) {
 			RotMessage message = (RotMessage) messageReceived;
 			players.get(message.getNumPlayer()).unitSetRotation(message.getNameUnit(), message.getRotation(), message.getIdPart());
 		}else if(messageType.equals("CreateEntityMessage")) {
 			CreateEntityMessage message = (CreateEntityMessage) messageReceived;
 			if(message.getTypeEntity().equals("worker")) {
-				players.get(message.getNumPlayer()).addWorker(message.getNameEntity(), message.getPosX(), message.getPosY());
+				players.get(message.getNumPlayer()).addWorker(message.getNameEntity(), message.getPosX() + 224 + offset[0], message.getPosY() + offset[1]);
 			}else if(message.getTypeEntity().equals("tank")) {
-				players.get(message.getNumPlayer()).addTank(message.getNameEntity(), message.getPosX(), message.getPosY());
+				players.get(message.getNumPlayer()).addTank(message.getNameEntity(), message.getPosX() + 224 + offset[0], message.getPosY() + offset[1]);
+			}else if(message.getTypeEntity().equals("headquarter")) {
+				players.get(message.getNumPlayer()).addHeadquarter(message.getNameEntity(), message.getPosX() + 224 + offset[0], message.getPosY() + offset[1]);
 			}else if(message.getTypeEntity().equals("factory")) {
-				players.get(message.getNumPlayer()).addFactory(message.getNameEntity(), message.getPosX(), message.getPosY());
+				players.get(message.getNumPlayer()).addFactory(message.getNameEntity(), message.getPosX() + 224 + offset[0], message.getPosY() + offset[1]);
 			}
 		}else if(messageType.equals("DestroyEntityMessage")) {
 			DestroyEntityMessage message = (DestroyEntityMessage) messageReceived;
@@ -192,10 +204,32 @@ public class Game {
 		}else if(messageType.equals("FireMessage")) {
 			FireMessage message = (FireMessage) messageReceived;
 			players.get(message.getNumPlayer()).fireUnit(message.getNameUnit());
-			createEffect(new TankImpact(message.getImpactPosX() + 224, message.getImpactPosY(), 0));
+			createEffect(new TankImpact(message.getImpactPosX() + 224 + offset[0], message.getImpactPosY() + offset[1], 0));
 		}else if(messageType.equals("UpdateMoneyMessage")) {
 			UpdateMoneyMessage message = (UpdateMoneyMessage) messageReceived;
 			players.get(message.getNumPlayer()).updateMoney(message.getMoney());
+		}
+	}
+	
+	public Map getMap() {
+		return map;
+	}
+
+	public void moveCam(float[] camMove) {
+		camMove = new float[] {camMove[0]*64, camMove[1]*64};
+		offset[0] -= camMove[0];
+		offset[1] -= camMove[1];
+		
+		for(Tile tile : map.getTile()) {
+			tile.setPos(tile.getPos()[0] - camMove[0], tile.getPos()[1] - camMove[1]);
+		}
+		
+		for( Structure structure : getAllstructures()) {
+			structure.setPos(structure.getPos()[0] - camMove[0], structure.getPos()[1] - camMove[1]);
+		}
+		
+		for( Unit unit : getAllUnits()) {
+			unit.setPos(unit.getPos()[0] - camMove[0], unit.getPos()[1] - camMove[1]);
 		}
 	}
 }
