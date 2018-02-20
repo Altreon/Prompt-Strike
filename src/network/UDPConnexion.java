@@ -24,6 +24,8 @@ public class UDPConnexion implements Runnable{
 	public int port = 2345;
 	
 	private DatagramSocket socket;
+	
+	public boolean connect;
 
 	@Override
 	public void run() {
@@ -33,7 +35,7 @@ public class UDPConnexion implements Runnable{
 			System.out.println("Unexpected exception: " + ioe.getMessage());
 		}
 		if(socket != null) {
-			boolean connect = true;
+			connect = true;
 			while (connect) {  
 				try {  
 					byte[] buffer = new byte[256];
@@ -48,7 +50,6 @@ public class UDPConnexion implements Runnable{
 			    } catch(IOException ioe) {  
 			    	System.out.println("Uerror: " + ioe.getMessage());
 			    	stop();
-			    	connect = false;
 			    }
 			}
 		}
@@ -59,7 +60,8 @@ public class UDPConnexion implements Runnable{
 	}
 	
 	
-	public void stop(){  
+	public void stop(){
+		connect = false;
     	socket.close();
     }
     

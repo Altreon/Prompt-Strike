@@ -34,7 +34,9 @@ public class TCPConnexion implements Runnable{
 					receiveMessage();
 				} catch (IOException e) {
 					connect = false;
-					e.printStackTrace();
+					//e.printStackTrace();
+					System.out.println("connexion lost");
+					disconnect();
 				}
 				//Command.processServerCommand(numPlayer, line, correct);
 			}
@@ -56,6 +58,11 @@ public class TCPConnexion implements Runnable{
 		}
 	    System.out.println("Connected: " + socket);
 	    return true;		
+	}
+	
+	public void disconnect () {
+		stop();
+		Game.disconnect();
 	}
 	
 	public void start() throws IOException{  

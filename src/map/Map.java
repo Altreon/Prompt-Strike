@@ -23,7 +23,8 @@ public class Map {
 		}
 		
 		ressources = new Ressource[13][11];
-		ressources[4][0] = new Ressource("crystal", 4, 0);
+		ressources[1][1] = new Ressource("crystal", 1, 1);
+		ressources[11][9] = new Ressource("crystal", 11, 9);
 		
 	}
 	

@@ -208,6 +208,13 @@ public class Game {
 		}else if(messageType.equals("UpdateMoneyMessage")) {
 			UpdateMoneyMessage message = (UpdateMoneyMessage) messageReceived;
 			players.get(message.getNumPlayer()).updateMoney(message.getMoney());
+		}else if(messageType.equals("EndGameMessage")) {
+			EndGameMessage message = (EndGameMessage) messageReceived;
+			if(message.areYouWin()) {
+				PromptStrike.getInputScreen().dispCommand("YOU WIN", true);
+			}else {
+				PromptStrike.getInputScreen().dispCommand("YOU LOSE", false);
+			}
 		}
 	}
 	
@@ -231,5 +238,12 @@ public class Game {
 		for( Unit unit : getAllUnits()) {
 			unit.setPos(unit.getPos()[0] - camMove[0], unit.getPos()[1] - camMove[1]);
 		}
+	}
+
+	public static void disconnect() {
+		players.clear();
+		effects.clear();
+		network.disconnect();
+		System.gc();
 	}
 }

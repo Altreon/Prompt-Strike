@@ -23,7 +23,7 @@ public class Command {
 			words.add(word);
 		}
 		
-		if(isLocalCommand(words.get(0))) {
+		if(isLocalCommand(words.get(0)) || !game.inGame()) {
 			processLocalCommand(commandText);
 		}else if(game.inGame()){
 			Game.sendCommand(commandText);
@@ -36,6 +36,7 @@ public class Command {
 	}
 
 	private static void processLocalCommand(String commandText) {
+		System.out.println(commandText);
 		boolean commandCorrect = false;
 		
 		ArrayList<String> words = new ArrayList<String>();
@@ -51,6 +52,7 @@ public class Command {
 			commandCorrect = moveCamCommand(firstWord, words);
 		}
 		if (commandCorrect) {
+			System.out.println("commandText?");
 			inputScreen.dispCommand(commandText, true);
 		}else{
 			inputScreen.dispCommand(commandText, false);

@@ -40,6 +40,12 @@ public class Network {
 		TCPConnexion = new TCPConnexion();
 		return TCPConnexion.connect(iPAddress);
 	}
+	
+	public void disconnect() {
+		TCPConnexion = null;
+		UDPConnexion.stop();
+		UDPConnexion = null;
+	}
 
 	public boolean isConnected() {
 		return TCPConnexion != null && TCPConnexion.getSocket() != null;
