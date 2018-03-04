@@ -1,20 +1,16 @@
 package display;
 
-import java.util.ArrayList;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import main.Game;
-import main.PromptStrike;
+import assets.Fonts;
+import game.Game;
 
-public class GameDisplay implements Screen{
+public class Display implements Screen{
 	
 	private Game game;
-	//truc
 	
 	private GameScreen gameScreen;
 	private InputScreen inputScreen;
@@ -22,8 +18,10 @@ public class GameDisplay implements Screen{
 	
 	private SpriteBatch renderer;
 	
-	public GameDisplay (Game game) {
+	public Display (Game game) {
 		this.game = game;
+		
+		Fonts.initialize();
 		
 		gameScreen = new GameScreen(game);
 		inputScreen = new InputScreen();
@@ -35,7 +33,6 @@ public class GameDisplay implements Screen{
 
 	@Override
 	public void show() {
-		// TODO Auto-generated method stub
 		
 	}
 

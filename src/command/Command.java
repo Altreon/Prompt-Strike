@@ -1,16 +1,21 @@
-package main;
+package command;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.graphics.Color;
-
 import display.InputScreen;
+import game.Game;
 
 public class Command {
 	
 	private static Game game;
 	private static InputScreen inputScreen;
 
+	/*
+	 * Here, the process of treat command is simple,
+	 * if the entered command is local (like connect to server), the command system work like the server,
+	 * the words of the command are decomposing and analyzing to do the correct action with the asked values.
+	 * Else, the command string is sending to the server.
+	 */
 	
 	public Command (Game game, InputScreen inputScreen) {
 		Command.game = game;
@@ -36,9 +41,9 @@ public class Command {
 	}
 
 	private static void processLocalCommand(String commandText) {
-		System.out.println(commandText);
 		boolean commandCorrect = false;
 		
+		//gets a list of command's words
 		ArrayList<String> words = new ArrayList<String>();
 		for (String word : commandText.split(" ")) {
 			words.add(word);
@@ -52,26 +57,11 @@ public class Command {
 			commandCorrect = moveCamCommand(firstWord, words);
 		}
 		if (commandCorrect) {
-			System.out.println("commandText?");
 			inputScreen.dispCommand(commandText, true);
 		}else{
 			inputScreen.dispCommand(commandText, false);
 		}	
 	}
-
-	/*private static boolean networkCommand(String firstWord, ArrayList<String> words) {
-		if (words.size() != 1) {
-			return false;
-		}
-		
-		String IPAddress = words.get(0);
-		
-		if (firstWord.equals("connect")) {
-			return connectedServer(IPAddress);
-		}
-		
-		return false;
-	}*/
 	
 	private static boolean networkCommand(String firstWord, ArrayList<String> words) {
 		if (words.size() != 0) {
@@ -108,38 +98,4 @@ public class Command {
 		
 		return true;
 	}
-
-	/*public static void processServerCommand(int numPlayer, String commandText, boolean correct) {
-		if(correct) {
-			ArrayList<String> words = new ArrayList<String>();
-			for (String word : commandText.split(" ")) {
-				words.add(word);
-			}
-			
-			String firstWord = words.remove(0);
-			
-			if(firstWord.equals("create")) {
-				addCommand(numPlayer, words);
-			}else if(firstWord.equals("player")) {
-				Game.getPlayers().add(new Player());
-			}
-		}
-		inputScreen.dispCommand(commandText, correct);
-	}*/
-	
-	/*private static void addCommand(int numPlayer, ArrayList<String> words) {
-		String entityType = words.get(0);
-		String entityName = words.get(1);
-		int entityPosX = Integer.parseInt(words.get(2));
-		int entityPosY = Integer.parseInt(words.get(3));
-		
-		if(entityType.equals("worker")) {
-			Game.createWorker(entityName, entityPosX, entityPosY);
-		}else if(entityType.equals("tank")) {
-			Game.createTank(entityName, entityPosX, entityPosY);
-		}else if(entityType.equals("factory")) {
-			Game.createFactory(entityName, entityPosX, entityPosY);
-		}
-		
-	}*/
 }

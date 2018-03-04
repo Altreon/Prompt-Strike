@@ -1,9 +1,10 @@
 package map;
 
 public class Environment extends Tile{
-
-	public Environment(String type) {
-		super(type);
+	//for the future
+	
+	public Environment(String type, int posX, int posY) {
+		super(type, posX, posY);
 	}
 
 }

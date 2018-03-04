@@ -11,26 +11,34 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 
-import main.Command;
+import assets.FontFiles;
+import assets.Fonts;
+import command.Command;
+import map.Map;
 
 public class InputScreen{
 	
-	private Skin uiSkin;
+	private Skin uiFont; // Store the character font to display command from a file
 	
-	private Stage stage;
-	private TextField input;
+	private Stage stage; // UI group, usually use to do different actions on group and show different parts of HUD in different way.
+	private TextField input; // The command input
+	
 	private List<Label> commandsDisplay;
 	
-	private static String lastCommand;
+	private static ArrayList<String> commandsHistory;
+	private static int history;
+	
 	
 	public InputScreen () {
-		uiSkin = new Skin(Gdx.files.internal("uiskin/uiskin.json"));
+		uiFont = Fonts.getFont(FontFiles.DigitalFont);
 		
-		input = new TextField("", uiSkin);
-		input.setSize(224, 30);
-		input.setPosition(224 + 64*13, 0);
+		input = new TextField("", uiFont);
+		input.setSize(Map.getOffsetFromEdge(), 30);
+		input.setPosition(Map.getOffsetFromEdge() + Map.getTileSize()*Map.getMapSizeX(), 0);
 
 		commandsDisplay = new ArrayList<Label>();
+		
+		commandsHistory = new ArrayList<String>();
 		
 		stage = new Stage();
 		stage.addActor(input);
@@ -44,13 +52,23 @@ public class InputScreen{
 	public void render () {
 		stage.draw();
 		
+		//Send a command
 		if (Gdx.input.isKeyJustPressed(Keys.ENTER)){
 			newCommand();
+			history = 0;
 		}
 		
-		if (Gdx.input.isKeyJustPressed(Keys.UP)){
-			input.setText(lastCommand);
+		//rewrite a previous command
+		if (Gdx.input.isKeyJustPressed(Keys.UP) && history < commandsHistory.size()){
+			history++;
+			input.setText(commandsHistory.get(commandsHistory.size() - history));
 		}
+		
+		//rewrite a next command
+		if (Gdx.input.isKeyJustPressed(Keys.DOWN) && history > 1){
+			history--;
+			input.setText(commandsHistory.get(commandsHistory.size() - history));
+		}		
 	}
 	
 	private void newCommand() {
@@ -59,11 +77,11 @@ public class InputScreen{
 		
 		Command.processCommand(commandText);
 		
-		lastCommand = commandText;
+		//commandsHistory.add(commandText); ???
 	}
 	
 	public void dispCommand(String commandText, boolean correct) {
-		Label commandDisplay = new Label(commandText, uiSkin);
+		Label commandDisplay = new Label(commandText, uiFont);
 		
 		if(correct) {
 			commandDisplay.setColor(Color.WHITE);
@@ -79,7 +97,7 @@ public class InputScreen{
 		commandsDisplay.add(commandDisplay);
 		stage.addActor(commandDisplay);
 		
-		lastCommand = commandText;
+		commandsHistory.add(commandText);
 	}
 
 }

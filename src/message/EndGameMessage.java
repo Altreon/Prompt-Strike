@@ -1,10 +1,9 @@
 package message;
 
 public class EndGameMessage extends Message{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+
+	private static final long serialVersionUID = 1L; //needed to be serializable
+	
 	private boolean win;
 	
 	public EndGameMessage (boolean win) {

@@ -1,10 +1,9 @@
 package message;
 
 public class CommandMessage extends Message{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	
+	private static final long serialVersionUID = 1L; //needed to be serializable
+	
 	private String command;
 	private boolean correct;
 	
@@ -16,7 +15,6 @@ public class CommandMessage extends Message{
 	public String getCommand() {
 		return command;
 	}
-	
 	
 	public boolean getCorrect() {
 		return correct;

@@ -10,8 +10,6 @@ public abstract class Entity {
 	protected float[] pos;
 	
 	public abstract void render(Batch batch);
-	//public abstract void update(int dt);
-	//public abstract void setPos(float posX, float posY);
 	
 	public Entity(String name, float posX, float posY) {
 		this.name = name;

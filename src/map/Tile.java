@@ -8,9 +8,10 @@ public class Tile {
 	private String type;
 	private Sprite sprite;
 	
-	public Tile (String type) {
+	public Tile (String type, int posX, int posY) {
 		this.type = type;
 		sprite = new Sprite(new Texture("Tiles/" + type + ".png"));
+		setPos(Map.getOffsetFromEdge() + Map.getTileSize()*posX, Map.getTileSize()*posY);
 	}
 	
 	public void render (Batch batch) {

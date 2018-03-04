@@ -3,30 +3,29 @@ package display;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 
-import main.Command;
+import assets.FontFiles;
+import assets.Fonts;
 
 public class OutputScreen{
 	
-	private Skin uiSkin;
+	//Globally unused for now
 	
-	private Stage stage;
+	private Skin uiFont; //character font to display data
+	
+	private Stage stage; // UI group, usually use to do different actions on group and show different parts of HUD in different way.
 	private static Label moneyDisp;
-	private List<Label> commandsDisplay;
+	private List<Label> messagesDisplay; //Unused for now, it is for show different message from the server
 	
 	public OutputScreen () {
-		uiSkin = new Skin(Gdx.files.internal("uiskin/uiskin.json"));
+		uiFont = Fonts.getFont(FontFiles.DigitalFont);
 
-		commandsDisplay = new ArrayList<Label>();
+		messagesDisplay = new ArrayList<Label>();
 		
-		moneyDisp = new Label("MONEY : 0", uiSkin);
+		moneyDisp = new Label("MONEY : 0", uiFont);
 		moneyDisp.setPosition(0, 0);
 		
 		stage = new Stage();

@@ -1,15 +1,13 @@
 package effet;
 
-import com.badlogic.gdx.graphics.Texture;
-
-import entity.TEXTURE;
-import entity.Textures;
+import assets.TextureFiles;
+import assets.Textures;
 
 public class TankImpact extends Effect{
 	
+	private static final int DURATION = 100; // ???
+	
 	public TankImpact (float posX, float posY, float rotation) {
-		super(Textures.getTexture(TEXTURE.TankImpact), posX, posY, rotation);
-		
-		duration = 10000;
+		super(Textures.getTexture(TextureFiles.TankImpact), posX, posY, rotation, DURATION);		
 	}
 }

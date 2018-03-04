@@ -1,12 +1,8 @@
-package main;
+package Player;
 
-import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.Map;
 
 import display.OutputScreen;
-import effet.Effect;
-import effet.TankFire;
 import entity.*;
 
 public class Player {
@@ -14,17 +10,13 @@ public class Player {
 	private int money;
 	
 	private Hashtable<String, Unit> units;
-	private ArrayList<Unit> unitsToRemove;
 	
 	private Hashtable<String, Structure> structures;
-	private ArrayList<Structure> structuresToRemove;
 	
 	public Player () {
 		units = new Hashtable<String, Unit>();
-		unitsToRemove = new ArrayList<Unit>();
 		
 		structures = new Hashtable<String, Structure>();
-		structuresToRemove = new ArrayList<Structure>();
 	}
 	
 	public void updateMoney(int amount) {
@@ -64,10 +56,6 @@ public class Player {
 		return units.get(name).getClass().getSimpleName().equals("Tank");
 	}
 	
-	/*public void fireUnit(String nameUnit, int value, int playerOwner) {
-		((Tank) units.get(name)).fire(value, playerOwner);
-	}*/
-	
 	public void fireUnit(String name) {
 		((Tank) units.get(name)).fire();
 	}
@@ -92,16 +80,6 @@ public class Player {
 	public void addFactory(String name, float posX, float posY) {
 		structures.put(name, new Factory(name, posX, posY));
 	}
-
-	/*public void destroyEntity(Entity entity) {
-		String entityClass = entity.getClass().getSuperclass().getSimpleName();
-		if(entityClass.equals("Unit")) {
-			units.remove(entity.getName());
-		}else {
-			structures.remove(entity.getName());
-		}
-		
-	}*/
 
 	public void destroyEntity(String typeEntity, String nameEntity) {
 		if(typeEntity.equals("Unit")) {

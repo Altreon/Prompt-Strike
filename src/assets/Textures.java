@@ -1,4 +1,4 @@
-package entity;
+package assets;
 
 import java.util.Hashtable;
 
@@ -10,12 +10,12 @@ public abstract class Textures {
 	public static void initialize () {
 		textures = new Hashtable<String, Texture>();
 		
-		for(TEXTURE texture : TEXTURE.values()){
+		for(TextureFiles texture : TextureFiles.values()){
 			textures.put(texture.toString(), new Texture(texture.toString()));
 		}
 	}
 	
-	public static Texture getTexture (TEXTURE texture) {
+	public static Texture getTexture (TextureFiles texture) {
 		return textures.get(texture.toString());
 	}
 }

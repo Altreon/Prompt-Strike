@@ -1,44 +1,42 @@
 package network;
 
-import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.DatagramPacket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import main.Command;
-import main.Game;
+import game.Game;
 import message.Message;
 
 public class TCPConnexion implements Runnable{
+
 	private Socket socket;
+	
 	private ObjectInputStream streamIn;
 	private DataOutputStream streamOut;
+	
+	public boolean connect;
 
 	@Override
 	public void run() {
 		try {  
 		    start();
 		} catch(IOException ioe) {  
-			System.out.println("Unexpected exception: " + ioe.getMessage());
+			System.out.println("Error creating TCP-Connexion");
+			ioe.printStackTrace();
 		}
 		
 		if(socket != null) {
-			boolean connect = true;
+			connect = true;
 			while (connect) {
 				try {
 					receiveMessage();
 				} catch (IOException e) {
 					connect = false;
-					//e.printStackTrace();
 					System.out.println("connexion lost");
 					disconnect();
 				}
-				//Command.processServerCommand(numPlayer, line, correct);
 			}
 		}
 	}
@@ -48,11 +46,9 @@ public class TCPConnexion implements Runnable{
 		try {
 			socket = new Socket(IPAddress, 10);
 		} catch (UnknownHostException e) {
-			//e.printStackTrace();
 			System.out.println("incorrect IP address");
 			return false;
 		} catch (IOException e) {
-			//e.printStackTrace();
 			System.out.println("connexion has failed!");
 			return false;
 		}
@@ -66,18 +62,19 @@ public class TCPConnexion implements Runnable{
 	}
 	
 	public void start() throws IOException{  
-		streamIn   = new ObjectInputStream(socket.getInputStream());
+		streamIn = new ObjectInputStream(socket.getInputStream());
 	    streamOut = new DataOutputStream(socket.getOutputStream());
 	}
 	
-	public void stop() {  
+	public void stop() {
+		connect = false;
     	try {
     		streamIn.close();
 	    	streamOut.close();
 	        socket.close();
-    	}
-      catch(IOException ioe) {
-    	  System.out.println("Error closing ...");
+    	} catch(IOException ioe) {
+    	  System.out.println("Error closing");
+    	  ioe.printStackTrace();
         }
     }
 	
@@ -91,7 +88,6 @@ public class TCPConnexion implements Runnable{
 					
 			Game.processMessage(message);
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -101,7 +97,8 @@ public class TCPConnexion implements Runnable{
 			streamOut.writeUTF(command);
 			streamOut.flush();
 		} catch (IOException ioe) {
-			System.out.println("Error sending command:" + ioe.getMessage());
+			System.out.println("Error sending command");
+			ioe.printStackTrace();
 		}
     }
 }

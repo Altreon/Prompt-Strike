@@ -1,7 +1,7 @@
-package entity;
+package assets;
 
-public enum TEXTURE {
-	
+public enum TextureFiles {
+		
 	Worker ("Units/worker.png"),
 	TankChassis ("Units/tank/chassis.png"),
 	TankCannon ("Units/tank/cannon.png"),
@@ -12,15 +12,15 @@ public enum TEXTURE {
 	TankFire ("Effects/tankFire.png"),
 	TankImpact ("Effects/tankImpact.png");
 
-	private String texturePath;
+	private String filePath;
 
 	   
-	TEXTURE(String texturePath){
-		this.texturePath = texturePath;
+	TextureFiles(String filePath){
+		this.filePath = filePath;
 
 	}
 
 	public String toString(){
-		return texturePath;
+		return filePath;
 	}
 }

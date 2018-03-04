@@ -1,11 +1,10 @@
 package entity;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 
 public class Tank extends Unit {
 	
-	private static final int COST = 20;
+	private static final int COST = 20; // Use to show unit price on the future
 	
 	private Chassis chassis;
 	private Cannon cannon;
@@ -35,16 +34,11 @@ public class Tank extends Unit {
 	public void render(Batch batch) {
 		super.render(batch);
 		
-		//garder?
+		//Update the cannon position during the fire animation
 		cannon.update(chassis.getX(), chassis.getY());
 	}
 
-	/*public void fire(int distance, int playerOwner) {
-		cannon.fire(distance, playerOwner);
-	}*/
-
 	public void fire() {
 		cannon.fire();
-		
 	}
 }

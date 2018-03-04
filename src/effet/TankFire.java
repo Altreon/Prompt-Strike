@@ -1,15 +1,12 @@
 package effet;
 
-import com.badlogic.gdx.graphics.Texture;
-
-import entity.TEXTURE;
-import entity.Textures;
+import assets.TextureFiles;
+import assets.Textures;
 
 public class TankFire extends Effect{
+	private static final int DURATION = 100;
 	
 	public TankFire (float posX, float posY, float rotation) {
-		super(Textures.getTexture(TEXTURE.TankFire), posX, posY, rotation);
-		
-		duration = 100;
+		super(Textures.getTexture(TextureFiles.TankFire), posX, posY, rotation, DURATION);
 	}
 }

@@ -1,15 +1,12 @@
 package network;
 
 public class Network {
+	
 	private TCPConnexion TCPConnexion;
 	private UDPConnexion UDPConnexion;
 	
 	private Thread TCPThread;
 	private Thread UDPThread;
-	
-	public Network () {
-		
-	}
 	
 	public boolean connect (String iPAddress) {
 		if(tryConnect(iPAddress)) {
@@ -23,9 +20,11 @@ public class Network {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}};
+			
 			UDPConnexion.setPort(TCPConnexion.getSocket().getLocalPort());
 			UDPThread = new Thread(UDPConnexion);
 			UDPThread.start();
+			
 			return true;
 		}else {
 			return false;
@@ -42,6 +41,7 @@ public class Network {
 	}
 	
 	public void disconnect() {
+		TCPConnexion.stop();
 		TCPConnexion = null;
 		UDPConnexion.stop();
 		UDPConnexion = null;

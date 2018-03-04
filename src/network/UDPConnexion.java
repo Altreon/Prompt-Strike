@@ -1,27 +1,18 @@
 package network;
 
 import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.MulticastSocket;
-import java.net.Socket;
-import java.net.SocketAddress;
-import java.net.UnknownHostException;
+import java.net.SocketException;
 
-import main.Command;
-import main.Game;
+import game.Game;
 import message.Message;
-import message.PosMessage;
 
 public class UDPConnexion implements Runnable{
 	
-	public int port = 2345;
+	public int port;
 	
 	private DatagramSocket socket;
 	
@@ -29,26 +20,20 @@ public class UDPConnexion implements Runnable{
 
 	@Override
 	public void run() {
-		try { 
-			socket = new DatagramSocket(port);
-		} catch(IOException ioe) {  
-			System.out.println("Unexpected exception: " + ioe.getMessage());
-		}
+		start();
+		
 		if(socket != null) {
 			connect = true;
 			while (connect) {  
 				try {  
-					byte[] buffer = new byte[256];
+					byte[] buffer = new byte[256]; // 256 more than enough (conventional) to store any message for this application
 	                DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
 	                
 	                socket.receive(packet);
 	                
 	                receiveMessage(packet);
-					
-					//String command = new String(packet.getData());
-					//System.out.println(command);
 			    } catch(IOException ioe) {  
-			    	System.out.println("Uerror: " + ioe.getMessage());
+			    	System.out.println("UDP error: " + ioe.getMessage());
 			    	stop();
 			    }
 			}
@@ -59,6 +44,14 @@ public class UDPConnexion implements Runnable{
 		this.port = port;
 	}
 	
+	public void start() {
+		try {
+			socket = new DatagramSocket(port);
+		} catch (SocketException se) {
+			System.out.println("Error creating UDP-Connexion");
+			se.printStackTrace();
+		}
+	}
 	
 	public void stop(){
 		connect = false;
@@ -72,11 +65,9 @@ public class UDPConnexion implements Runnable{
 			iStream.close();
 					
 			Game.processMessage(message);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

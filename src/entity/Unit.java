@@ -1,9 +1,6 @@
 package entity;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-
-import math.MATH;
 
 public abstract class Unit extends Entity{
 	private final int MAINPART = 0;
@@ -11,12 +8,14 @@ public abstract class Unit extends Entity{
 	
 	public Unit(String name, float posX, float posY, int nbPart) {
 		super(name, posX, posY);
+		
+		//A parts variable need to be initialized non-null for the render function
 		parts = new Part[nbPart];
 	}
 	
 	public void render(Batch batch) {
 		for (Part part : parts) {
-			if(part != null) {
+			if(part != null) { //To avoid bug when a render loop took place before parts initialization (different threads)
 				part.draw(batch);
 			}
 		}
@@ -27,10 +26,6 @@ public abstract class Unit extends Entity{
 		parts[MAINPART].setPosition(posX, posY);
 	}
 	
-	//public float[] getPos() {
-		//return new float[]{chassis.getX(), chassis.getY()};
-	//}
-	
 	public void setRotation(float rotation, int idPart) {
 		parts[idPart].setRotation(rotation);
 	}
@@ -38,9 +33,5 @@ public abstract class Unit extends Entity{
 	public float getRotation() {
 		return parts[MAINPART].getRotation();
 	}
-	
-	//public Part[] getParts () {
-		//return parts;
-	//}
 	
 }
