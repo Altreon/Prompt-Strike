@@ -54,7 +54,7 @@ public class Command {
 		if(firstWord.equals("connect")) {
 			commandCorrect = networkCommand(firstWord, words);
 		}else if(firstWord.equals("movecam") || firstWord.equals("mc")) {
-			commandCorrect = moveCamCommand(firstWord, words);
+			commandCorrect = moveCamCommand(words);
 		}
 		if (commandCorrect) {
 			inputScreen.dispCommand(commandText, true);
@@ -64,11 +64,11 @@ public class Command {
 	}
 	
 	private static boolean networkCommand(String firstWord, ArrayList<String> words) {
-		if (words.size() != 0) {
+		if (words.size() != 1) {
 			return false;
 		}
 		
-		String IPAddress = "127.0.0.1";
+		String IPAddress = words.get(0);
 		
 		if (firstWord.equals("connect")) {
 			return connectedServer(IPAddress);
@@ -81,7 +81,7 @@ public class Command {
 		return Game.connectServer(IPAddress);
 	}
 	
-	private static boolean moveCamCommand(String firstWord, ArrayList<String> words) {
+	private static boolean moveCamCommand(ArrayList<String> words) {
 		if (words.size() != 2) {
 			return false;
 		}
