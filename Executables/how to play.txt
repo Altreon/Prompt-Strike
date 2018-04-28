@@ -1,0 +1,29 @@
+Local commands:
+- Connect to server : connect IP_address (127.0.0.1 or localhost for local server)
+- Move the camera : movecam distX distY OR mc distX distY
+
+
+Units commands :
+- Move : unit_name move distance OR unit_name m distance
+- Move to relative point : unit_name move distX distY OR unit_name m distX distY
+- Rotate : unit_name rotate angle OR unit_name r angle
+- Rotate cannon (only for tank) : unit_name rotate cannon angle OR unit_name r c angle
+- Fire : unit_name fire distance OR unit_name f distance
+- Gather (only for worker) : unit_name gather OR unit_name g
+- Build structure (only for worker) : unit_name build struct_type struct_name OR unit_name b struct_type struct_name
+
+struct_type possible : factory
+
+
+Structure commands :
+- Produce unit : struct_name produce unit_type unit_name OR struct_name p unit_type unit_name
+
+unit_type possible : worker (on headquarter), tank (on factory)
+
+
+
+
+Destroy the ennemie headquarter to win!
+
+
+PS : the name of heaquarter at the begining of the game is "head"
