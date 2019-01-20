@@ -6,4 +6,5 @@ Il s'agit d'un jeu de stratégie en temps réel simpliste et en réseau, avec un
 </br>
 ![image](http://image.noelshack.com/fichiers/2018/17/6/1524931095-command-exemple.png)
 </br></br>
-Une version du jeu jouable et du serveur est disponible dans le dossier "Executables"
+Plus d'information et téléchargement sur mon portfolio:
+https://portoliomatteobrandi.wordpress.com/portfolio/prompt-strike/
